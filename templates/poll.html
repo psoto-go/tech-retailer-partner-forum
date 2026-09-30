@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AuraTech - Live Audience Role Poll</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+              "primary-container": "#1a73e8",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary-fixed": "#002108",
+              "surface": "#faf9fd",
+              "inverse-primary": "#adc7ff",
+              "tertiary-fixed": "#8ffa9b",
+              "inverse-surface": "#2f3033",
+              "on-surface-variant": "#414754",
+              "outline-variant": "#c1c6d6",
+              "on-tertiary-container": "#000701",
+              "on-primary-container": "#ffffff",
+              "on-secondary-fixed": "#181c20",
+              "on-primary-fixed-variant": "#004493",
+              "error-container": "#ffdad6",
+              "on-primary": "#ffffff",
+              "on-tertiary-fixed-variant": "#00531e",
+              "on-secondary": "#ffffff",
+              "on-primary-fixed": "#001a41",
+              "surface-container-low": "#f4f3f7",
+              "surface-tint": "#005bc0",
+              "primary": "#005bbf",
+              "on-error": "#ffffff",
+              "secondary-fixed": "#dfe3e8",
+              "primary-fixed": "#d8e2ff",
+              "tertiary-container": "#16893a",
+              "outline": "#727785",
+              "on-surface": "#1a1b1e",
+              "on-background": "#1a1b1e",
+              "on-tertiary": "#ffffff",
+              "secondary-fixed-dim": "#c3c7cc",
+              "error": "#ba1a1a",
+              "surface-container-highest": "#e3e2e6",
+              "surface-container": "#efedf1",
+              "surface-container-high": "#e9e7eb",
+              "secondary": "#5b5f64",
+              "on-secondary-fixed-variant": "#43474c",
+              "on-secondary-container": "#5f6368",
+              "on-error-container": "#93000a",
+              "tertiary-fixed-dim": "#73dc82",
+              "tertiary": "#006d2a",
+              "primary-fixed-dim": "#adc7ff",
+              "surface-dim": "#dbd9dd",
+              "secondary-container": "#dde0e6",
+              "background": "#faf9fd",
+              "surface-bright": "#faf9fd",
+              "surface-variant": "#e3e2e6",
+              "inverse-on-surface": "#f1f0f4"
+            },
+            "borderRadius": {
+              "DEFAULT": "0.25rem",
+              "lg": "0.5rem",
+              "xl": "0.75rem",
+              "full": "9999px"
+            },
+            "spacing": {
+              "space-xl": "2.5rem",
+              "margin-mobile": "1.25rem",
+              "space-md": "1rem",
+              "gutter-mobile": "1rem",
+              "gutter": "1.5rem",
+              "margin": "3rem",
+              "space-sm": "0.5rem",
+              "space-lg": "1.5rem",
+              "space-xs": "0.25rem"
+            },
+            "fontFamily": {
+              "label-sm": ["Inter"],
+              "body-lg": ["Inter"],
+              "headline-lg": ["Plus Jakarta Sans"],
+              "headline-lg-mobile": ["Plus Jakarta Sans"],
+              "display-hero": ["Plus Jakarta Sans"],
+              "headline-sm": ["Plus Jakarta Sans"],
+              "body-md": ["Inter"],
+              "label-md": ["Inter"],
+              "headline-md": ["Plus Jakarta Sans"],
+              "display-hero-mobile": ["Plus Jakarta Sans"],
+              "label-lg": ["Inter"],
+              "body-sm": ["Inter"]
+            },
+            "fontSize": {
+              "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "500" }],
+              "body-lg": ["18px", { "lineHeight": "28px", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+              "headline-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+              "headline-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+              "display-hero": ["56px", { "lineHeight": "64px", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+              "headline-sm": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+              "body-md": ["15px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }],
+              "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+              "headline-md": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+              "display-hero-mobile": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+              "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+              "body-sm": ["13px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "400" }]
+            }
+          }
+        }
+      }
+</script>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased selection:bg-primary-container selection:text-white min-h-screen flex flex-col justify-between">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-50 w-full border-b border-outline-variant bg-surface/90 backdrop-blur-md">
+<div class="flex justify-between items-center w-full px-space-xl max-w-[1440px] mx-auto h-20">
+<div class="flex items-center space-x-12">
+<a class="text-headline-sm font-headline-sm font-bold text-primary" href="/">AuraTech</a>
+<nav class="hidden md:flex items-center space-x-8">
+<a class="text-on-surface-variant hover:text-primary transition-colors text-label-md font-label-md" href="/">Store</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-label-md font-label-md" href="/">Fitbit</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-label-md font-label-md" href="/">Wearables</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-label-md font-label-md" href="/">Accessories</a>
+<a class="text-primary font-bold text-label-md font-label-md relative py-2" href="/poll">
+              Live Role Poll
+              <span class="absolute bottom-0 left-0 w-full h-[2px] bg-[#005bbf]"></span>
+</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-label-md font-label-md" href="/admin">Support</a>
+</nav>
+</div>
+<div class="flex items-center space-x-4">
+<div class="hidden xl:flex items-center bg-surface-container-low px-3 py-1.5 rounded-full border border-outline-variant/50 space-x-2">
+<span class="relative flex h-2.5 w-2.5">
+<span id="sync-ping" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+<span id="sync-dot" class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+</span>
+<span id="sync-text" class="text-label-sm font-label-sm text-on-surface-variant tracking-wider">LIVE SYNC</span>
+</div>
+<div class="hidden sm:flex items-center bg-surface-container-high px-3 py-1.5 rounded-full text-label-sm font-label-sm font-semibold">
+            TOTAL VOTES: <span class="ml-1 text-primary" id="total-votes-count">0</span>
+</div>
+<a href="/vote" target="_blank" class="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-label-md font-label-md transition-all shadow-sm">
+            Open Vote View
+</a>
+<div class="flex items-center space-x-2 text-on-surface-variant hover:text-primary cursor-pointer pl-2" onclick="window.location.href='/'">
+<span class="material-symbols-outlined text-[20px]">shopping_bag</span>
+<span class="text-label-md font-label-md hidden sm:inline">Bag (0)</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Container -->
+<main class="flex-grow w-full max-w-[1440px] mx-auto px-6 py-8">
+<!-- Page Header Section -->
+<div class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-outline-variant/40 pb-6">
+<div>
+<div class="text-label-md font-label-md text-primary tracking-wider uppercase mb-2 flex items-center space-x-2">
+<span id="event-name-label">PARTNER FORUM 2026</span>
+<span>•</span>
+<span id="event-subtitle-label">LIVE AUDIENCE POLL</span>
+</div>
+<h1 id="poll-question-heading" class="text-headline-lg-mobile md:text-headline-lg font-headline-lg text-on-surface">What best describes your role today?</h1>
+</div>
+<div id="voting-status-pill" class="flex items-center space-x-2 bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-full self-start md:self-auto">
+<span class="relative flex h-2 w-2">
+<span id="status-ping" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+<span id="status-dot" class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+</span>
+<span id="status-label" class="text-label-sm font-label-sm text-emerald-700 font-medium">Accepting Real-Time Votes</span>
+</div>
+</div>
+<!-- Two-Column Split Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- LEFT COLUMN: Scan to Vote Card -->
+<div class="lg:col-span-4">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 shadow-sm flex flex-col items-center text-center space-y-6 sticky top-28">
+<span class="bg-primary-fixed text-on-primary-fixed px-3 py-1 rounded-full text-label-sm font-label-sm tracking-wider uppercase">
+              SCAN TO VOTE
+            </span>
+<div class="space-y-1">
+<h2 class="text-headline-sm font-headline-sm font-semibold text-on-surface">Join the Live Vote</h2>
+<p class="text-body-sm font-body-sm text-on-surface-variant">Point your phone camera at the QR code to cast your vote instantly.</p>
+</div>
+<!-- REAL Scannable QR Code Matrix -->
+<a href="/vote" target="_blank" title="Scan with your phone camera or click to open mobile voting page" class="relative p-4 bg-white border border-outline-variant/60 rounded-xl shadow-inner group block cursor-pointer hover:border-primary transition-colors">
+<div class="absolute -top-2 -left-2 w-4 h-4 border-t-2 border-l-2 border-primary"></div>
+<div class="absolute -top-2 -right-2 w-4 h-4 border-t-2 border-r-2 border-primary"></div>
+<div class="absolute -bottom-2 -left-2 w-4 h-4 border-b-2 border-l-2 border-primary"></div>
+<div class="absolute -bottom-2 -right-2 w-4 h-4 border-b-2 border-r-2 border-primary"></div>
+<div id="qr-svg-container" class="w-48 h-48 bg-white rounded-lg flex items-center justify-center relative overflow-hidden">
+  <img id="qr-code-img" src="/api/qr?format=png" alt="Scan to Vote QR Code" class="w-48 h-48 object-contain rounded-lg block" />
+</div>
+</a>
+<!-- Copyable URL Box -->
+<div class="w-full flex items-center justify-between bg-surface-container-low border border-outline-variant px-3 py-2 rounded-lg">
+<span id="vote-url-text" class="text-body-sm font-mono text-on-surface-variant truncate mr-2">/vote</span>
+<button id="copy-url-btn" class="bg-surface hover:bg-surface-container text-primary px-3 py-1 rounded text-label-sm font-label-sm border border-outline-variant transition-colors flex items-center space-x-1 shrink-0" onclick="copyVoteUrl()">
+<span class="material-symbols-outlined text-[14px]" id="copy-icon">content_copy</span>
+<span id="copy-label">Copy</span>
+</button>
+</div>
+<!-- 3 Steps Sequence -->
+<div class="w-full grid grid-cols-3 gap-2 pt-2 border-t border-outline-variant/50 text-center">
+<div class="flex flex-col items-center">
+<span class="w-6 h-6 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center text-label-sm font-label-sm mb-1">1</span>
+<span class="text-[11px] text-on-surface-variant">Scan QR</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="w-6 h-6 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center text-label-sm font-label-sm mb-1">2</span>
+<span class="text-[11px] text-on-surface-variant">Pick Role</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="w-6 h-6 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center text-label-sm font-label-sm mb-1">3</span>
+<span class="text-[11px] text-on-surface-variant">Watch Live</span>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: Live Role Distribution -->
+<div class="lg:col-span-8 space-y-6">
+<!-- Filter Tabs & Header -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-surface-container-lowest p-4 rounded-xl border border-outline-variant">
+<h2 class="text-headline-sm font-headline-sm text-on-surface">Live Role Distribution</h2>
+<div class="flex flex-wrap gap-2" id="role-filter-tabs">
+<button onclick="setRoleFilter('all')" data-filter="all" class="filter-pill px-3 py-1.5 rounded-full text-label-md font-label-md bg-primary text-white transition-all shadow-xs">All Roles</button>
+<button onclick="setRoleFilter('Engineering')" data-filter="Engineering" class="filter-pill px-3 py-1.5 rounded-full text-label-md font-label-md bg-surface text-on-surface-variant hover:bg-surface-container-low border border-outline-variant transition-all">Engineering</button>
+<button onclick="setRoleFilter('Business')" data-filter="Business" class="filter-pill px-3 py-1.5 rounded-full text-label-md font-label-md bg-surface text-on-surface-variant hover:bg-surface-container-low border border-outline-variant transition-all">Business</button>
+<button onclick="setRoleFilter('Leadership')" data-filter="Leadership" class="filter-pill px-3 py-1.5 rounded-full text-label-md font-label-md bg-surface text-on-surface-variant hover:bg-surface-container-low border border-outline-variant transition-all">Leadership</button>
+</div>
+</div>
+<!-- 7 Role Cards List (Starts at 0 votes and updates live via SSE + API) -->
+<div id="role-cards-list" class="space-y-4">
+  <!-- Rendered dynamically by renderPollState() -->
+</div>
+<!-- 3 Compact Summary KPI Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+<!-- KPI 1 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl flex items-center space-x-4">
+<div class="p-3 bg-primary-fixed text-on-primary-fixed rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">group</span>
+</div>
+<div>
+<div class="text-label-sm font-label-sm text-on-surface-variant tracking-wider uppercase">ATTENDEES VOTED</div>
+<div id="kpi-total-votes" class="text-headline-sm font-headline-sm text-on-surface font-bold">0</div>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl flex items-center space-x-4">
+<div class="p-3 bg-primary-fixed text-on-primary-fixed rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">trending_up</span>
+</div>
+<div>
+<div class="text-label-sm font-label-sm text-on-surface-variant tracking-wider uppercase">LEADING ROLE</div>
+<div id="kpi-leading-role" class="text-headline-sm font-headline-sm text-on-surface font-bold truncate max-w-[180px]">Waiting for votes...</div>
+</div>
+</div>
+<!-- KPI 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-4 rounded-xl flex items-center space-x-4">
+<div class="p-3 bg-emerald-100 text-emerald-800 rounded-xl flex items-center justify-center relative">
+<span class="absolute -top-1 -right-1 flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+</span>
+<span class="material-symbols-outlined text-[24px]">bolt</span>
+</div>
+<div>
+<div class="text-label-sm font-label-sm text-on-surface-variant tracking-wider uppercase">REAL-TIME ENGINE</div>
+<div id="kpi-engine-status" class="text-headline-sm font-headline-sm text-on-surface font-bold">Active (SSE Live)</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container-low border-t border-outline-variant mt-16 w-full">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-space-xl py-space-xl max-w-[1440px] mx-auto gap-4">
+<div class="flex flex-col md:flex-row items-center gap-4 text-center md:text-left">
+<span class="text-headline-sm font-headline-sm font-bold text-primary">AuraTech</span>
+<span class="text-body-sm font-body-sm text-on-surface-variant">© 2026 AuraTech Inc. All rights reserved.</span>
+<span class="hidden md:inline text-outline-variant">|</span>
+<span id="live-event-feed" class="text-body-sm font-body-sm text-on-surface-variant italic">Scan the QR code or click any role card to cast a live vote.</span>
+</div>
+<div class="flex flex-wrap items-center justify-center gap-6 text-body-sm font-body-sm">
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="/">Storefront</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="/vote">Mobile Vote</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="/admin">Admin Panel</a>
+<button class="text-primary hover:underline font-semibold text-body-sm" onclick="simulateVotes(5)">+5 Demo Votes</button>
+<button class="text-error hover:underline font-semibold text-body-sm ml-2" onclick="resetPollVotes()">Reset to 0 Votes</button>
+</div>
+</div>
+</footer>
+
+<script>
+  let pollState = null;
+  let activeFilter = 'all';
+  let lastTotalVotes = null;
+
+  const BAR_OPACITIES = [
+    'bg-primary',
+    'bg-primary/75',
+    'bg-primary/65',
+    'bg-primary/55',
+    'bg-primary/45',
+    'bg-primary/35',
+    'bg-primary/25'
+  ];
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  }
+
+  function playVoteChime() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.12);
+      gain.gain.setValueAtTime(0.06, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.25);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.25);
+    } catch (e) {}
+  }
+
+  async function loadQrMetadata() {
+    const liveVoteUrl = window.location.origin + '/vote';
+    document.getElementById('vote-url-text').textContent = liveVoteUrl;
+    const qrImg = document.getElementById('qr-code-img');
+    if (qrImg) {
+      qrImg.src = '/api/qr?format=png&url=' + encodeURIComponent(liveVoteUrl);
+    }
+  }
+
+  function copyVoteUrl() {
+    const urlText = document.getElementById('vote-url-text').textContent || (window.location.origin + '/vote');
+    navigator.clipboard.writeText(urlText).then(() => {
+      const label = document.getElementById('copy-label');
+      const icon = document.getElementById('copy-icon');
+      label.textContent = 'Copied!';
+      icon.textContent = 'check';
+      setTimeout(() => {
+        label.textContent = 'Copy';
+        icon.textContent = 'content_copy';
+      }, 2000);
+    });
+  }
+
+  function setRoleFilter(filterKey) {
+    activeFilter = filterKey;
+    document.querySelectorAll('.filter-pill').forEach(btn => {
+      if (btn.dataset.filter === filterKey) {
+        btn.className = 'filter-pill px-3 py-1.5 rounded-full text-label-md font-label-md bg-primary text-white transition-all shadow-xs';
+      } else {
+        btn.className = 'filter-pill px-3 py-1.5 rounded-full text-label-md font-label-md bg-surface text-on-surface-variant hover:bg-surface-container-low border border-outline-variant transition-all';
+      }
+    });
+    if (pollState) renderPollState(pollState);
+  }
+
+  function renderPollState(state) {
+    if (!state || !Array.isArray(state.options)) return;
+
+    if (lastTotalVotes !== null && state.totalVotes > lastTotalVotes) {
+      playVoteChime();
+      const latest = (state.recentActivity || []).slice(-1)[0];
+      if (latest && latest.title) {
+        document.getElementById('live-event-feed').textContent =
+          `Live vote received for "${latest.title}" (${state.totalVotes} total votes)`;
+      } else {
+        document.getElementById('live-event-feed').textContent =
+          `Live update: ${state.totalVotes} total votes recorded (${new Date().toLocaleTimeString()})`;
+      }
+    }
+    lastTotalVotes = state.totalVotes;
+    pollState = state;
+
+    const evName = state.eventName || (state.settings && state.settings.eventName);
+    if (evName) {
+      document.getElementById('event-name-label').textContent = evName.toUpperCase();
+    }
+    const qText = state.question || (state.settings && state.settings.question);
+    if (qText) {
+      document.getElementById('poll-question-heading').textContent = qText;
+    }
+
+    const votingOpen = state.votingOpen !== undefined ? state.votingOpen : true;
+    const statusLabel = document.getElementById('status-label');
+    const statusPill = document.getElementById('voting-status-pill');
+    const statusDot = document.getElementById('status-dot');
+    const statusPing = document.getElementById('status-ping');
+    if (votingOpen) {
+      statusLabel.textContent = 'Accepting Real-Time Votes';
+      statusLabel.className = 'text-label-sm font-label-sm text-emerald-700 font-medium';
+      statusPill.className = 'flex items-center space-x-2 bg-emerald-50 border border-emerald-200 px-3.5 py-1.5 rounded-full self-start md:self-auto';
+      statusDot.className = 'relative inline-flex rounded-full h-2 w-2 bg-emerald-500';
+      statusPing.className = 'animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75';
+    } else {
+      statusLabel.textContent = 'Voting Paused';
+      statusLabel.className = 'text-label-sm font-label-sm text-amber-800 font-medium';
+      statusPill.className = 'flex items-center space-x-2 bg-amber-50 border border-amber-200 px-3.5 py-1.5 rounded-full self-start md:self-auto';
+      statusDot.className = 'relative inline-flex rounded-full h-2 w-2 bg-amber-500';
+      statusPing.className = 'hidden';
+    }
+
+    // Total votes counters
+    document.getElementById('total-votes-count').textContent = state.totalVotes;
+    document.getElementById('kpi-total-votes').textContent = state.totalVotes;
+
+    // Normalize options
+    const normalized = state.options.map(o => ({
+      ...o,
+      label: o.title || o.label || '',
+      votes: o.count !== undefined ? o.count : (o.votes || 0)
+    }));
+
+    const sorted = [...normalized].sort((a, b) => b.votes - a.votes || (a.order || 0) - (b.order || 0));
+    const leader = sorted[0];
+    document.getElementById('kpi-leading-role').textContent =
+      (leader && leader.votes > 0) ? leader.label : 'Waiting for votes...';
+
+    const visibleOptions = activeFilter === 'all'
+      ? sorted
+      : sorted.filter(o => (o.category || '').toLowerCase() === activeFilter.toLowerCase());
+
+    const myVoteId = state.myVote || state.userVote;
+    const listEl = document.getElementById('role-cards-list');
+    listEl.innerHTML = visibleOptions.map((opt) => {
+      const globalRank = sorted.findIndex(o => o.id === opt.id) + 1;
+      const isLeading = globalRank === 1 && opt.votes > 0;
+      const isMyVote = myVoteId === opt.id;
+      const pct = state.totalVotes > 0 ? ((opt.votes / state.totalVotes) * 100).toFixed(1) : '0.0';
+      const voteWord = opt.votes === 1 ? '1 vote' : `${opt.votes} votes`;
+      const barClass = BAR_OPACITIES[Math.min(globalRank - 1, BAR_OPACITIES.length - 1)];
+
+      const badgeHtml = isLeading
+        ? `<span class="bg-primary text-white text-label-sm font-label-sm px-2.5 py-1 rounded-md font-bold">#1 LEADING</span>`
+        : `<span class="bg-secondary-container text-on-secondary-container text-label-sm font-label-sm px-2.5 py-1 rounded-md font-semibold">#${globalRank}</span>`;
+
+      const myVotePill = isMyVote
+        ? `<span class="ml-2 bg-primary-fixed text-on-primary-fixed text-[11px] font-semibold px-2 py-0.5 rounded-full">YOUR VOTE</span>`
+        : '';
+
+      const borderClass = isMyVote
+        ? 'border-primary ring-1 ring-primary/30'
+        : 'border-outline-variant';
+
+      return `
+        <div class="bg-surface-container-lowest border ${borderClass} rounded-xl p-5 flex flex-col justify-between space-y-3 hover:shadow-md transition-all group cursor-pointer" onclick="castQuickVote('${escapeHtml(opt.id)}')">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center space-x-3">
+              ${badgeHtml}
+              <div>
+                <h3 class="text-headline-sm font-headline-sm text-on-surface group-hover:text-primary transition-colors flex items-center">
+                  <span>${escapeHtml(opt.label)}</span>
+                  ${myVotePill}
+                </h3>
+                <p class="text-body-sm font-body-sm text-on-surface-variant">${escapeHtml(opt.subtitle || '')}</p>
+              </div>
+            </div>
+            <div class="text-right shrink-0 ml-4">
+              <span class="text-headline-sm font-headline-sm ${isLeading ? 'text-primary' : 'text-on-surface'} font-bold">${voteWord}</span>
+              <div class="text-body-sm font-body-sm text-on-surface-variant">${pct}%</div>
+            </div>
+          </div>
+          <div class="w-full bg-surface-container-high h-2.5 rounded-full overflow-hidden">
+            <div class="${barClass} h-full rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  async function refreshState() {
+    try {
+      const res = await fetch('/api/state', { cache: 'no-store' });
+      if (res.ok) {
+        const data = await res.json();
+        renderPollState(data);
+      }
+    } catch (e) {}
+  }
+
+  async function castQuickVote(optionId) {
+    try {
+      const res = await fetch('/api/vote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ optionId })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.state || data.stats) renderPollState(data.state || data.stats);
+      }
+    } catch (e) {
+      console.error('Vote error:', e);
+    }
+  }
+
+  async function resetPollVotes() {
+    try {
+      const res = await fetch('/api/admin/reset-votes', { method: 'POST' });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.state) renderPollState(data.state);
+        else await refreshState();
+        document.getElementById('live-event-feed').textContent = 'All votes reset to 0.';
+      }
+    } catch (e) {
+      console.error('Reset error:', e);
+    }
+  }
+
+  async function simulateVotes(count = 5) {
+    try {
+      const res = await fetch('/api/admin/simulate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ count })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.state) renderPollState(data.state);
+        else await refreshState();
+      }
+    } catch (e) {
+      console.error('Simulate error:', e);
+    }
+  }
+
+  function connectSSE() {
+    const es = new EventSource('/api/stream');
+    es.onmessage = (evt) => {
+      try {
+        const data = JSON.parse(evt.data);
+        if (pollState && (pollState.myVote || pollState.userVote) && !data.myVote) {
+          data.myVote = pollState.myVote || pollState.userVote;
+        }
+        renderPollState(data);
+        document.getElementById('kpi-engine-status').textContent = 'Active (SSE Live)';
+        document.getElementById('sync-text').textContent = 'LIVE SYNC';
+      } catch (e) {}
+    };
+    es.onerror = () => {
+      es.close();
+      setTimeout(connectSSE, 3000);
+    };
+  }
+
+  // Initial boot + SSE + 2s live sync fallback for Cloud Run HTTP proxy resilience
+  loadQrMetadata();
+  refreshState();
+  connectSSE();
+  setInterval(refreshState, 2000);
+</script>
+</body></html>

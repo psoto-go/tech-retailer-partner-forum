@@ -1,0 +1,6 @@
+# Used by ./setup.sh to build the pre-cached base image in YOUR project's Artifact Registry.
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args: ["build", "-f", "Dockerfile.base", "-t", "${_BASE_IMAGE}", "."]
+images:
+  - "${_BASE_IMAGE}"

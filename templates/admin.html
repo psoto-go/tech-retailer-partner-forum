@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AuraTech - Poll Admin Console</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+              "primary-container": "#1a73e8",
+              "surface-container-lowest": "#ffffff",
+              "surface": "#faf9fd",
+              "on-surface-variant": "#414754",
+              "outline-variant": "#c1c6d6",
+              "on-primary": "#ffffff",
+              "on-primary-fixed": "#001a41",
+              "surface-container-low": "#f4f3f7",
+              "primary": "#005bbf",
+              "primary-fixed": "#d8e2ff",
+              "outline": "#727785",
+              "on-surface": "#1a1b1e",
+              "error": "#ba1a1a",
+              "surface-container-high": "#e9e7eb",
+              "secondary-container": "#dde0e6",
+              "on-secondary-container": "#5f6368"
+            },
+            "fontFamily": {
+              "headline": ["Plus Jakarta Sans", "sans-serif"],
+              "body": ["Inter", "sans-serif"]
+            }
+          }
+        }
+      }
+</script>
+</head>
+<body class="bg-surface text-on-surface font-body antialiased min-h-screen flex flex-col justify-between">
+<!-- AuraTech TopNavBar -->
+<header class="sticky top-0 z-50 w-full border-b border-outline-variant bg-surface/90 backdrop-blur-md">
+  <div class="flex justify-between items-center w-full px-8 max-w-[1440px] mx-auto h-20">
+    <div class="flex items-center space-x-10">
+      <a class="text-xl font-headline font-bold text-primary" href="/">AuraTech</a>
+      <nav class="hidden md:flex items-center space-x-8 text-xs font-semibold">
+        <a class="text-on-surface-variant hover:text-primary transition-colors" href="/">Store</a>
+        <a class="text-on-surface-variant hover:text-primary transition-colors" href="/poll">Live Role Poll</a>
+        <a class="text-on-surface-variant hover:text-primary transition-colors" href="/vote">Mobile Vote</a>
+        <a class="text-primary font-bold border-b-2 border-primary py-2" href="/admin">Poll Admin</a>
+      </nav>
+    </div>
+    <div class="flex items-center space-x-3">
+      <a href="/poll" class="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-full text-xs font-semibold transition-all">
+        Back to Live Stage Poll
+      </a>
+    </div>
+  </div>
+</header>
+
+<main class="flex-grow w-full max-w-[1024px] mx-auto px-6 py-8 space-y-6">
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-outline-variant/50 pb-5">
+    <div>
+      <span class="text-xs font-semibold uppercase tracking-wider text-primary">PARTNER FORUM 2026 • CONTROL CENTER</span>
+      <h1 class="text-3xl font-headline font-bold text-on-surface mt-1">Live Audience Poll Administration</h1>
+    </div>
+    <div class="flex flex-wrap gap-2">
+      <button onclick="simulateVotes(5)" class="bg-primary-fixed text-on-primary-fixed hover:bg-primary hover:text-white px-4 py-2 rounded-lg text-xs font-semibold transition-colors">
+        +5 Demo Votes
+      </button>
+      <button onclick="simulateVotes(15)" class="bg-primary-fixed text-on-primary-fixed hover:bg-primary hover:text-white px-4 py-2 rounded-lg text-xs font-semibold transition-colors">
+        +15 Demo Votes
+      </button>
+      <button onclick="resetVotes()" class="bg-red-50 text-error border border-red-200 hover:bg-red-100 px-4 py-2 rounded-lg text-xs font-semibold transition-colors">
+        Reset Votes to 0
+      </button>
+      <a href="/api/admin/export" class="bg-surface-container-lowest border border-outline-variant hover:border-primary px-4 py-2 rounded-lg text-xs font-semibold transition-colors">
+        Export CSV
+      </a>
+    </div>
+  </div>
+
+  <!-- Poll Settings Card -->
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 space-y-4 shadow-xs">
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg font-headline font-semibold text-on-surface">Poll Configuration</h2>
+      <label class="inline-flex items-center space-x-2 cursor-pointer">
+        <input type="checkbox" id="voting-open-toggle" class="rounded border-outline-variant text-primary focus:ring-primary" onchange="saveSettings()"/>
+        <span class="text-sm font-medium text-on-surface">Accepting Live Votes</span>
+      </label>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs font-semibold uppercase text-on-surface-variant mb-1">Poll Question</label>
+        <input id="question-input" type="text" class="w-full rounded-lg border-outline-variant text-sm" />
+      </div>
+      <div>
+        <label class="block text-xs font-semibold uppercase text-on-surface-variant mb-1">Event Name</label>
+        <input id="event-input" type="text" class="w-full rounded-lg border-outline-variant text-sm" />
+      </div>
+    </div>
+    <div class="flex justify-end">
+      <button onclick="saveSettings()" class="bg-primary hover:bg-primary-container text-white px-4 py-2 rounded-lg text-xs font-semibold">
+        Save Settings
+      </button>
+    </div>
+  </div>
+
+  <!-- Options Breakdown & Add Role Card -->
+  <div class="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 space-y-4 shadow-xs">
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg font-headline font-semibold text-on-surface">Role Categories (<span id="admin-total-votes">0</span> total votes)</h2>
+    </div>
+    <div id="admin-options-list" class="divide-y divide-outline-variant/40"></div>
+  </div>
+</main>
+
+<script>
+  async function loadAdminState() {
+    const res = await fetch('/api/state');
+    const state = await res.json();
+    document.getElementById('question-input').value = state.question || '';
+    document.getElementById('event-input').value = state.eventName || '';
+    document.getElementById('voting-open-toggle').checked = !!state.votingOpen;
+    document.getElementById('admin-total-votes').textContent = state.totalVotes || 0;
+
+    const list = document.getElementById('admin-options-list');
+    list.innerHTML = (state.options || []).map(opt => `
+      <div class="py-3 flex items-center justify-between">
+        <div>
+          <div class="font-headline font-semibold text-sm text-on-surface">${opt.label}</div>
+          <div class="text-xs text-on-surface-variant">${opt.subtitle || ''}</div>
+        </div>
+        <div class="flex items-center space-x-4">
+          <span class="text-sm font-bold text-primary">${opt.votes} votes</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  async function saveSettings() {
+    await fetch('/api/admin/settings', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        question: document.getElementById('question-input').value,
+        eventName: document.getElementById('event-input').value,
+        votingOpen: document.getElementById('voting-open-toggle').checked
+      })
+    });
+    loadAdminState();
+  }
+
+  async function simulateVotes(count) {
+    await fetch('/api/admin/simulate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ count })
+    });
+    loadAdminState();
+  }
+
+  async function resetVotes() {
+    await fetch('/api/admin/reset-votes', { method: 'POST' });
+    loadAdminState();
+  }
+
+  loadAdminState();
+</script>
+</body></html>

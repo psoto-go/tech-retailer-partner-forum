@@ -1,0 +1,10 @@
+# One-time base image with all Python dependencies pre-installed (built by ./setup.sh).
+# ./deploy.sh then only copies the app code on top of it, so deploys take ~15-20 s.
+FROM python:3.12-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt

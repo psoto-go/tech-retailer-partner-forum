@@ -1,0 +1,78 @@
+{
+  "settings": {
+    "eventName": "Partner Forum 2026",
+    "question": "What best describes your role today?",
+    "adminPin": "partner2026",
+    "votingOpen": true,
+    "allowVoteChanges": true,
+    "showLiveResultsToAudience": true
+  },
+  "options": [
+    {
+      "id": "opt_devs",
+      "title": "Developers & Engineers",
+      "subtitle": "Software Engineers, Fullstack, AI/ML & DevOps",
+      "category": "Engineering",
+      "icon": "code",
+      "color": "emerald",
+      "order": 1
+    },
+    {
+      "id": "opt_tech_arch",
+      "title": "Technical & Architects",
+      "subtitle": "Cloud Architects, Solutions Architects, Tech Leads",
+      "category": "Engineering",
+      "icon": "cpu",
+      "color": "cyan",
+      "order": 2
+    },
+    {
+      "id": "opt_consultants",
+      "title": "Consultants & SI Partners",
+      "subtitle": "System Integrators, Solution Providers & Advisory Partners",
+      "category": "Business",
+      "trackTag": "Partner Ecosystem Track",
+      "icon": "clipboard",
+      "color": "orange",
+      "order": 3
+    },
+    {
+      "id": "opt_marketing",
+      "title": "Marketing & Growth",
+      "subtitle": "CMO, Product Marketing, Brand & Demand Gen",
+      "category": "Business",
+      "icon": "flask",
+      "color": "rose",
+      "order": 4
+    },
+    {
+      "id": "opt_clevel",
+      "title": "C-Level & Founders",
+      "subtitle": "CEO, CTO, CIO, VP, Managing Director",
+      "category": "Leadership",
+      "icon": "star",
+      "color": "blue",
+      "order": 5
+    },
+    {
+      "id": "opt_sales_bd",
+      "title": "Sales & Partnerships",
+      "subtitle": "Alliance Managers, BD Directors, Account Execs",
+      "category": "Business",
+      "icon": "briefcase",
+      "color": "purple",
+      "order": 6
+    },
+    {
+      "id": "opt_product_ops",
+      "title": "Product & Operations",
+      "subtitle": "Product Managers, Delivery Leads, Agile Coaches",
+      "category": "Leadership",
+      "icon": "box",
+      "color": "amber",
+      "order": 7
+    }
+  ],
+  "votes": {},
+  "history": []
+}

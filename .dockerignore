@@ -1,0 +1,16 @@
+.git
+.gitignore
+.venv
+venv
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+.agent
+stitch_*.png
+stitch_*.html
+stitch_design_proposal.md
+walkthrough.md
+*.md
+!README.md

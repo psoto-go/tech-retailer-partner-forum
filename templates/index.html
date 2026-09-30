@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AuraTech - Official Google Hardware Partner</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-high": "#e9e7eb",
+            "tertiary-fixed": "#8ffa9b",
+            "inverse-primary": "#adc7ff",
+            "primary-fixed": "#d8e2ff",
+            "on-secondary-container": "#5f6368",
+            "surface-container-lowest": "#ffffff",
+            "surface-dim": "#dbd9dd",
+            "on-secondary": "#ffffff",
+            "on-primary": "#ffffff",
+            "on-surface-variant": "#414754",
+            "surface-container": "#efedf1",
+            "surface-variant": "#e3e2e6",
+            "secondary-container": "#dde0e6",
+            "on-surface": "#1a1b1e",
+            "inverse-surface": "#2f3033",
+            "on-error": "#ffffff",
+            "tertiary": "#006d2a",
+            "primary": "#005bbf",
+            "on-secondary-fixed": "#181c20",
+            "secondary-fixed": "#dfe3e8",
+            "surface": "#faf9fd",
+            "secondary-fixed-dim": "#c3c7cc",
+            "surface-bright": "#faf9fd",
+            "error-container": "#ffdad6",
+            "tertiary-fixed-dim": "#73dc82",
+            "outline": "#727785",
+            "on-background": "#1a1b1e",
+            "on-secondary-fixed-variant": "#43474c",
+            "on-tertiary": "#ffffff",
+            "on-primary-fixed-variant": "#004493",
+            "on-primary-container": "#ffffff",
+            "surface-container-highest": "#e3e2e6",
+            "error": "#ba1a1a",
+            "on-tertiary-fixed-variant": "#00531e",
+            "background": "#faf9fd",
+            "on-error-container": "#93000a",
+            "inverse-on-surface": "#f1f0f4",
+            "primary-container": "#1a73e8",
+            "on-tertiary-fixed": "#002108",
+            "on-primary-fixed": "#001a41",
+            "surface-tint": "#005bc0",
+            "surface-container-low": "#f4f3f7",
+            "primary-fixed-dim": "#adc7ff",
+            "on-tertiary-container": "#000701",
+            "outline-variant": "#c1c6d6",
+            "tertiary-container": "#16893a",
+            "secondary": "#5b5f64"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-xs": "0.25rem",
+            "margin": "3rem",
+            "gutter": "1.5rem",
+            "space-xl": "2.5rem",
+            "space-sm": "0.5rem",
+            "space-md": "1rem",
+            "space-lg": "1.5rem",
+            "gutter-mobile": "1rem",
+            "margin-mobile": "1.25rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Plus Jakarta Sans"],
+            "display-hero-mobile": ["Plus Jakarta Sans"],
+            "body-lg": ["Inter"],
+            "body-sm": ["Inter"],
+            "headline-sm": ["Plus Jakarta Sans"],
+            "label-lg": ["Inter"],
+            "headline-md": ["Plus Jakarta Sans"],
+            "label-md": ["Inter"],
+            "label-sm": ["Inter"],
+            "display-hero": ["Plus Jakarta Sans"],
+            "body-md": ["Inter"],
+            "headline-lg-mobile": ["Plus Jakarta Sans"]
+          },
+          "fontSize": {
+            "headline-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "display-hero-mobile": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-lg": ["18px", { "lineHeight": "28px", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+            "body-sm": ["13px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "400" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-lg": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+            "headline-md": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.03em", "fontWeight": "500" }],
+            "display-hero": ["56px", { "lineHeight": "64px", "letterSpacing": "-0.025em", "fontWeight": "700" }],
+            "body-md": ["15px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "headline-lg-mobile": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.015em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar Component -->
+<header class="sticky top-0 z-50 w-full bg-surface/90 dark:bg-inverse-surface/90 backdrop-blur-md border-b border-outline-variant dark:border-outline">
+<div class="flex justify-between items-center w-full px-space-xl max-w-[1440px] mx-auto h-20">
+<div class="flex items-center gap-space-xl">
+<a class="text-headline-sm font-headline-sm font-bold text-primary dark:text-inverse-primary tracking-tight" href="/">AuraTech</a>
+<nav class="hidden md:flex items-center gap-space-lg">
+<a class="text-label-md font-label-md text-primary font-bold hover:text-primary transition-colors" href="/">Store</a>
+<a class="text-label-md font-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors" href="#">Fitbit</a>
+<a class="text-label-md font-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors" href="#">Wearables</a>
+<a class="text-label-md font-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors" href="#">Accessories</a>
+<a class="text-label-md font-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors" href="/poll">Live Role Poll</a>
+<a class="text-label-md font-label-md text-on-surface-variant dark:text-surface-variant hover:text-primary transition-colors" href="#">Support</a>
+</nav>
+</div>
+<div class="flex items-center gap-space-md">
+<div class="relative hidden lg:block w-64">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">search</span>
+</span>
+<input class="w-full h-10 pl-10 pr-4 bg-surface-container-low border border-outline-variant rounded-full text-label-md focus:outline-none focus:border-primary transition-all" placeholder="Search Google hardware..." type="text"/>
+</div>
+<div class="flex items-center gap-space-sm">
+<button class="p-2 rounded-full hover:bg-surface-container-high transition-colors relative flex items-center gap-1">
+<span class="material-symbols-outlined">shopping_bag</span>
+<span class="text-label-sm bg-primary text-on-primary px-1.5 py-0.5 rounded-full">0</span>
+</button>
+<button class="p-2 rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined">person</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-[1440px] mx-auto px-space-xl py-space-xl flex flex-col gap-16">
+<!-- Hero Spotlight Banner -->
+<section class="relative rounded-2xl overflow-hidden bg-surface-container-low border border-outline-variant p-8 md:p-16 flex flex-col md:flex-row items-center justify-between gap-12">
+<div class="flex flex-col gap-6 max-w-xl z-10">
+<div class="inline-flex items-center gap-2 bg-surface-container-highest px-3 py-1 rounded-full w-fit">
+<span class="material-symbols-outlined text-primary text-sm">redeem</span>
+<span class="text-label-sm font-label-sm text-on-surface">New &bull; Partner Forum 2026 Giveaway</span>
+</div>
+<h1 class="text-display-hero font-display-hero text-on-surface tracking-tight">Google Fitbit Air</h1>
+<p class="text-headline-sm font-headline-sm text-on-surface">Lighter gets mightier.</p>
+<p class="text-body-lg text-on-surface-variant">Comfortable 24/7 tracking, powerful sensors, and up to a week of battery, with personalized Google Health Coach built with Gemini.</p>
+<div class="flex items-center gap-6 pt-2">
+<span class="text-headline-md font-headline-md text-on-surface">From $99.99</span>
+<button class="bg-primary hover:bg-[#1557B0] text-on-primary font-label-lg px-8 py-3 rounded-full transition-all duration-200 shadow-sm active:scale-98">Add to Bag</button>
+</div>
+</div>
+<div class="relative w-full md:w-1/2 h-[380px] rounded-xl overflow-hidden flex items-center justify-center bg-white">
+<img src="/static/images/fitbit-air.png" alt="Official Google Store photo of Google Fitbit Air woven fabric bands" class="w-full h-full object-cover"/>
+</div>
+</section>
+<!-- Product Grid Section -->
+<section class="flex flex-col gap-8">
+<div class="flex justify-between items-end">
+<div>
+<h2 class="text-headline-lg font-headline-lg text-on-surface">Explore Hardware</h2>
+<p class="text-body-md text-on-surface-variant">Designed by Google. Built for your life.</p>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 rounded-full border border-primary bg-primary text-on-primary text-label-md font-label-md">All Products</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant bg-surface hover:bg-surface-container text-on-surface text-label-md font-label-md transition-colors">Wearables</button>
+<button class="px-4 py-2 rounded-full border border-outline-variant bg-surface hover:bg-surface-container text-on-surface text-label-md font-label-md transition-colors">Phones</button>
+</div>
+</div>
+<!-- 3-Column Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Product Card 0: Google Fitbit Air -->
+<div class="bg-surface-container-low rounded-xl border border-outline-variant p-6 flex flex-col justify-between hover:border-outline transition-all duration-200 group">
+<div class="h-64 rounded-lg overflow-hidden relative mb-6 flex items-center justify-center bg-white">
+<img src="/static/images/fitbit-air.png" alt="Official Google Store photo of Google Fitbit Air" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"/>
+</div>
+<div class="flex flex-col gap-2">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Fitness Tracker Band</span>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Google Fitbit Air</h3>
+<p class="text-body-sm text-on-surface-variant">Lighter gets mightier. Screenless 24/7 tracking and up to a week of battery, with Google Health Coach built with Gemini.</p>
+</div>
+<div class="flex items-center justify-between mt-6 pt-4 border-t border-outline-variant">
+<span class="text-label-lg font-label-lg text-on-surface">From $99.99</span>
+<button class="bg-surface border border-outline-variant hover:border-primary text-primary px-4 py-2 rounded-full text-label-md font-label-md transition-all">Add to Bag</button>
+</div>
+</div>
+<!-- Product Card 1 -->
+<div class="bg-surface-container-low rounded-xl border border-outline-variant p-6 flex flex-col justify-between hover:border-outline transition-all duration-200 group">
+<div class="h-64 rounded-lg overflow-hidden relative mb-6 flex items-center justify-center">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-300" data-alt="A pristine studio product photograph of the Fitbit Charge 6 placed on a soft stone-gray minimal podium. The lighting is bright daylight, casting subtle soft shadows. The tracker displays a clean workout interface. The image follows a high-end minimalist hardware aesthetic with exceptional clarity and negative space." style="background-image: url('/static/images/fitbit-charge-6.png')"></div>
+</div>
+<div class="flex flex-col gap-2">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Fitness Tracker</span>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Fitbit Charge 6</h3>
+<p class="text-body-sm text-on-surface-variant">Google built-in, advanced health tracking, and seamless Google Maps integration.</p>
+</div>
+<div class="flex items-center justify-between mt-6 pt-4 border-t border-outline-variant">
+<span class="text-label-lg font-label-lg text-on-surface">$159.95</span>
+<button class="bg-surface border border-outline-variant hover:border-primary text-primary px-4 py-2 rounded-full text-label-md font-label-md transition-all">Add to Bag</button>
+</div>
+</div>
+<!-- Product Card 2 -->
+<div class="bg-surface-container-low rounded-xl border border-outline-variant p-6 flex flex-col justify-between hover:border-outline transition-all duration-200 group">
+<div class="h-64 rounded-lg overflow-hidden relative mb-6 flex items-center justify-center">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-300" data-alt="A clean, high-end product render of the Fitbit Sense 2 advanced health smartwatch displayed on an ultra-white background. The curved aluminum case and sleek infinity band gleam under soft professional studio lighting. The high-resolution display shows a biometric stress management score. Minimalist composition with abundant whitespace." style="background-image: url('/static/images/fitbit-sense-2.png')"></div>
+</div>
+<div class="flex flex-col gap-2">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Smartwatch</span>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Fitbit Sense 2</h3>
+<p class="text-body-sm text-on-surface-variant">Advanced health smartwatch with cEDA stress tracking, ECG, and sleep profiling.</p>
+</div>
+<div class="flex items-center justify-between mt-6 pt-4 border-t border-outline-variant">
+<span class="text-label-lg font-label-lg text-on-surface">$249.95</span>
+<button class="bg-surface border border-outline-variant hover:border-primary text-primary px-4 py-2 rounded-full text-label-md font-label-md transition-all">Add to Bag</button>
+</div>
+</div>
+<!-- Product Card 3 -->
+<div class="bg-surface-container-low rounded-xl border border-outline-variant p-6 flex flex-col justify-between hover:border-outline transition-all duration-200 group">
+<div class="h-64 rounded-lg overflow-hidden relative mb-6 flex items-center justify-center">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-300" data-alt="A professional product shot of the Google Pixel 9 Pro smartphone shown in a sophisticated porcelain white finish. The rear triple-camera bar gleams with a polished metallic finish against the matte glass back. Set against a minimalist daylight backdrop with crisp shadows and high-end hardware presentation." style="background-image: url('/static/images/pixel-9-pro.png')"></div>
+</div>
+<div class="flex flex-col gap-2">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Smartphone</span>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Google Pixel 9 Pro</h3>
+<p class="text-body-sm text-on-surface-variant">Powered by Google Tensor G4, professional triple camera system, and advanced AI features.</p>
+</div>
+<div class="flex items-center justify-between mt-6 pt-4 border-t border-outline-variant">
+<span class="text-label-lg font-label-lg text-on-surface">$999.00</span>
+<button class="bg-surface border border-outline-variant hover:border-primary text-primary px-4 py-2 rounded-full text-label-md font-label-md transition-all">Add to Bag</button>
+</div>
+</div>
+<!-- Product Card 4 -->
+<div class="bg-surface-container-low rounded-xl border border-outline-variant p-6 flex flex-col justify-between hover:border-outline transition-all duration-200 group">
+<div class="h-64 rounded-lg overflow-hidden relative mb-6 flex items-center justify-center">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-300" data-alt="An exquisite studio product photograph of the Google Pixel Watch 3 featuring a domed circular glass display and refined active band. The watch face shows elegant minimalist typography against a bright backdrop. The lighting is soft and even, accentuating the sleek chassis." style="background-image: url('/static/images/pixel-watch-3.png')"></div>
+</div>
+<div class="flex flex-col gap-2">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Smartwatch</span>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Google Pixel Watch 3</h3>
+<p class="text-body-sm text-on-surface-variant">Master your fitness with advanced running metrics, deeper Fitbit integration, and brighter display.</p>
+</div>
+<div class="flex items-center justify-between mt-6 pt-4 border-t border-outline-variant">
+<span class="text-label-lg font-label-lg text-on-surface">$349.99</span>
+<button class="bg-surface border border-outline-variant hover:border-primary text-primary px-4 py-2 rounded-full text-label-md font-label-md transition-all">Add to Bag</button>
+</div>
+</div>
+<!-- Product Card 5 -->
+<div class="bg-surface-container-low rounded-xl border border-outline-variant p-6 flex flex-col justify-between hover:border-outline transition-all duration-200 group">
+<div class="h-64 rounded-lg overflow-hidden relative mb-6 flex items-center justify-center">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-300" data-alt="A minimalist hardware render of the Google Pixel Buds Pro 2 in a sleek matching charging case, resting on a clean white surface. Soft ambient light highlights the ergonomic contours and matte finish. Premium consumer electronics photography style." style="background-image: url('/static/images/pixel-buds-pro-2.png')"></div>
+</div>
+<div class="flex flex-col gap-2">
+<span class="text-label-sm font-label-sm text-on-surface-variant">Audio</span>
+<h3 class="text-headline-sm font-headline-sm text-on-surface">Google Pixel Buds Pro 2</h3>
+<p class="text-body-sm text-on-surface-variant">Custom-engineered audio with Active Noise Cancellation, spatial audio, and ultra-secure fit.</p>
+</div>
+<div class="flex items-center justify-between mt-6 pt-4 border-t border-outline-variant">
+<span class="text-label-lg font-label-lg text-on-surface">$229.00</span>
+<button class="bg-surface border border-outline-variant hover:border-primary text-primary px-4 py-2 rounded-full text-label-md font-label-md transition-all">Add to Bag</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer Component -->
+<footer class="w-full bg-surface-container-low dark:bg-inverse-surface border-t border-outline-variant dark:border-outline mt-20">
+<div class="flex flex-col md:flex-row justify-between items-center w-full px-space-xl py-space-xl max-w-[1440px] mx-auto gap-6">
+<div class="flex flex-col md:flex-row items-center gap-6">
+<span class="text-headline-sm font-headline-sm font-bold text-primary dark:text-inverse-primary">AuraTech</span>
+<span class="text-body-sm text-on-surface-variant">© 2026 AuraTech Inc. All rights reserved.</span>
+</div>
+<div class="flex flex-wrap justify-center gap-space-lg">
+<a class="text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Store Locator</a>
+<a class="text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Sustainability</a>
+<a class="text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Press</a>
+</div>
+</div>
+</footer>
+</body></html>
