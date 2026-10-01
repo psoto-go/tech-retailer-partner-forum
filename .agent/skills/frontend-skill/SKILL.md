@@ -22,8 +22,8 @@ Read `templates/poll.html` (lines 1–165 and 275–295) and `templates/index.ht
 ### Step 1.2: Call Google Stitch MCP (`generate_screen_from_text`)
 Call `generate_screen_from_text` using the Stitch project for this repository:
 
-- **`projectId`**: `"<YOUR_STITCH_PROJECT_ID>"`
-- **`designSystem`**: `"<YOUR_STITCH_DESIGN_SYSTEM_ID>"` (AuraTech Minimal Hardware)
+- **`projectId`**: `"11024850840388252926"`
+- **`designSystem`**: `"assets/e0fecde15a2549a9b793168efec1fa4f"` (AuraTech Minimal Hardware)
 - **`deviceType`**: `"DESKTOP"`
 - **`modelId`**: `"GEMINI_3_8_FLASH"`
 - **`prompt`**:

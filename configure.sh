@@ -1,15 +1,14 @@
 #!/usr/bin/env bash
 # AuraTech Partner Kit — set YOUR values for the <YOUR_...> placeholders.
 #
-#   ./configure.sh                         # interactive: asks for each value (Enter keeps the current one)
-#   ./configure.sh --set KEY=VALUE [...]   # non-interactive (used by Antigravity), e.g. --set STITCH_PROJECT_ID=123
-#   ./configure.sh --show                  # print your stored values
+#   ./configure.sh                            # interactive: asks for your GCP project ID (Enter keeps the current one)
+#   ./configure.sh --set GCP_PROJECT_ID=<id>  # non-interactive (used by Antigravity)
+#   ./configure.sh --show                     # print the stored value
 #
-# KEYS: GCP_PROJECT_ID  STITCH_PROJECT_ID  STITCH_DESIGN_SYSTEM_ID
-# (Jira needs no config: Antigravity finds your ticket through your Jira MCP.)
+# Only GCP_PROJECT_ID is user-specific. Jira (your MCP) and Stitch (shared project baked into the repo) need no config.
 #
-# Values are stored OUTSIDE the repo in ~/.auratech/<repo>.env (never committed) and written into
-# .agent/rules, .agent/skills, Dockerfile and the scripts. Empty values keep their placeholder.
+# The value is stored OUTSIDE the repo in ~/.auratech/<repo>.env (never committed) and written into
+# .agent/rules, .agent/skills, Dockerfile and the scripts.
 # After every reset (git reset --hard / git clean), just run ./configure.sh again: no questions asked.
 # Compatible with macOS default bash 3.2 (no associative arrays).
 set -euo pipefail
@@ -20,15 +19,13 @@ REMOTE="$(git remote get-url origin 2>/dev/null || true)"
 NAME="$(basename "${REMOTE:-${ROOT}}" .git)"
 CFG_DIR="${HOME}/.auratech"
 CFG="${CFG_DIR}/${NAME}.env"
-KEYS="GCP_PROJECT_ID STITCH_PROJECT_ID STITCH_DESIGN_SYSTEM_ID"
+KEYS="GCP_PROJECT_ID"
 
 command -v python3 >/dev/null 2>&1 || { echo "❌ python3 is required (macOS: xcode-select --install)"; exit 1; }
 
 help_for() {
   case "$1" in
     GCP_PROJECT_ID)          echo "Google Cloud project ID (e.g. my-project-123)  [README Step 4]" ;;
-    STITCH_PROJECT_ID)       echo "Stitch project ID, numbers only (empty until README Step 5)" ;;
-    STITCH_DESIGN_SYSTEM_ID) echo "Stitch design system, e.g. assets/abc123 (empty until README Step 5)" ;;
   esac
 }
 valid_key() { case " ${KEYS} " in *" $1 "*) return 0 ;; *) return 1 ;; esac; }
@@ -53,14 +50,14 @@ if [[ "${1:-}" == "--show" ]]; then
   exit 0
 elif [[ "${1:-}" == "--set" ]]; then
   MODE="set"; shift
-  [[ $# -gt 0 ]] || { echo "Usage: ./configure.sh --set KEY=VALUE [...]"; exit 1; }
+  [[ $# -gt 0 ]] || { echo "Usage: ./configure.sh --set GCP_PROJECT_ID=<id>"; exit 1; }
   for kv in "$@"; do
     k="${kv%%=*}"; v="${kv#*=}"
     valid_key "${k}" || { echo "❌ Unknown key '${k}'. Valid: ${KEYS}"; exit 1; }
     setv "NEW_${k}" "${v}"
   done
 elif [[ -n "${1:-}" ]]; then
-  sed -n '2,13p' "$0"; exit 1
+  sed -n '2,11p' "$0"; exit 1
 fi
 
 if [[ "${MODE}" == "interactive" ]]; then
@@ -78,10 +75,8 @@ if [[ "${MODE}" == "interactive" ]]; then
   done
 fi
 
-# Basic validation (warn only).
-SP="$(get NEW_STITCH_PROJECT_ID)"; SD="$(get NEW_STITCH_DESIGN_SYSTEM_ID)"
-[[ -z "${SP}" || "${SP}" =~ ^[0-9]+$ ]] || echo "⚠️  STITCH_PROJECT_ID should be numbers only (no 'projects/')."
-[[ -z "${SD}" || "${SD}" == assets/* ]] || echo "⚠️  STITCH_DESIGN_SYSTEM_ID usually looks like 'assets/<id>'."
+GP0="$(get NEW_GCP_PROJECT_ID)"
+[[ -z "${GP0}" || "${GP0}" =~ ^[a-z][a-z0-9-]{4,28}[a-z0-9]$ ]] || echo "⚠️  '${GP0}' doesn't look like a GCP project ID (lowercase letters, digits, hyphens)."
 
 mkdir -p "${CFG_DIR}" && chmod 700 "${CFG_DIR}"
 : > "${CFG}"
@@ -91,7 +86,7 @@ chmod 600 "${CFG}"
 for k in ${KEYS}; do export "OLD_${k}" "NEW_${k}"; done
 python3 - <<'PY'
 import os, re
-keys = ["GCP_PROJECT_ID", "STITCH_PROJECT_ID", "STITCH_DESIGN_SYSTEM_ID"]
+keys = ["GCP_PROJECT_ID"]
 old = {k: os.environ.get("OLD_" + k, "") for k in keys}
 new = {k: os.environ.get("NEW_" + k, "") for k in keys}
 

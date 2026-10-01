@@ -8,10 +8,10 @@ Brownfield demo for **Google Antigravity**. You start from an existing web app: 
 > | Placeholder | What it is | Where you get it |
 > |---|---|---|
 > | `<YOUR_GCP_PROJECT_ID>` | Your Google Cloud project ID | [Cloud console](https://console.cloud.google.com/) → project picker |
-> | `<YOUR_STITCH_PROJECT_ID>` | Your Stitch project (numbers only, no `projects/`) | Created in Step 5 |
-> | `<YOUR_STITCH_DESIGN_SYSTEM_ID>` | Your Stitch design system (`assets/…`) | Created in Step 5 |
 >
-> **Set your values with one command:** `./configure.sh` asks for each value (leave blank the ones you don't have yet), stores them **outside the repo** in `~/.auratech/<repo>.env` and fills the placeholders. Re-run it any time; after a `git reset` it refills everything without questions. Antigravity uses `./configure.sh --set KEY=VALUE` when it creates the Stitch project for you. **Jira needs no configuration**: Antigravity finds your ticket through your Jira MCP.
+> **One command:** `./configure.sh` asks for your GCP project ID, stores it **outside the repo** in `~/.auratech/<repo>.env` and fills the placeholder. Re-run it any time; after a `git reset` it refills without questions.
+>
+> **Jira and Stitch need no configuration**: Antigravity finds your ticket through your Jira MCP, and the repo already points to the shared Stitch project [`11024850840388252926`](https://stitch.withgoogle.com/projects/11024850840388252926) with its design system `assets/e0fecde15a2549a9b793168efec1fa4f` (AuraTech Minimal Hardware). Ask the owner to share that Stitch project with your Google account.
 >
 > Antigravity is instructed to **ask you** for any placeholder that is still empty. It never stores tokens or API keys in the repo.
 
@@ -24,7 +24,7 @@ Brownfield demo for **Google Antigravity**. You start from an existing web app: 
 
 ```bash
 git clone <THIS_REPO_URL> auratech && cd auratech
-./configure.sh   # enter your GCP project ID now; the Stitch IDs come in Step 5
+./configure.sh   # enter your GCP project ID
 ```
 
 ---
@@ -60,7 +60,7 @@ Official guide: [Get started with the Atlassian Rovo MCP server](https://support
    }
    ```
    Replace `<YOUR_STITCH_API_KEY>` **only in your local `mcp_config.json`**. Never put it in this repo.
-3. Refresh the MCP servers and test: *"List my Stitch projects."*
+3. Refresh the MCP servers and test: *"List my Stitch projects."* You should see the shared project `11024850840388252926` (ask the owner to share it with you if not).
 
 Official guide: [Stitch MCP setup](https://stitch.withgoogle.com/docs/mcp/setup).
 
@@ -94,18 +94,16 @@ Do not continue until `check-cloud.sh` prints **🎉 All checks passed**.
 
 Useful docs: [Cloud Run deploy from source](https://cloud.google.com/run/docs/deploying-source-code) · [Public access / invoker IAM check](https://cloud.google.com/run/docs/securing/managing-access#invoker_check) · [Vertex AI image generation](https://cloud.google.com/vertex-ai/generative-ai/docs/image/overview).
 
-## Step 5: Create the existing webpage in Stitch and deploy it to Cloud Run
-The code in `templates/` is the source of truth for the existing web. Stitch gets the same design system, so the new feature matches it. Ask Antigravity:
-> *"Set up Stitch for this repo: create a Stitch project called 'AuraTech Storefront', upload `DESIGN.md` and create the design system from it, generate a reference 'AuraTech Storefront' screen, then save both IDs with `./configure.sh --set STITCH_PROJECT_ID=<id> STITCH_DESIGN_SYSTEM_ID=assets/<id>`. Then deploy the existing web with `./deploy.sh` and mark it as the baseline with `./mark-baseline.sh`."*
-
-This uses the Stitch MCP tools `create_project` → `upload_design_md` → `create_design_system_from_design_md` → `generate_screen_from_text`.
+## Step 5: Deploy the existing webpage to Cloud Run (baseline)
+The existing storefront and Live Role Poll already live as screens in the shared Stitch project `11024850840388252926`, with the AuraTech design system Antigravity will reuse for the new feature. Nothing to create in Stitch. Ask Antigravity:
+> *"Deploy the existing web with `./deploy.sh` and mark it as the baseline with `./mark-baseline.sh`."*
 
 Check the live URL printed by `deploy.sh`:
 - `/` shows the storefront with Google Fitbit Air.
 - `/poll` shows the Live Role Poll.
 - `/campaign` returns **404**. That's expected: the feature doesn't exist yet.
 
-Your values live in `~/.auratech/<repo>.env`, so you never need to commit them. Check them with `./configure.sh --show`.
+Your GCP project ID lives in `~/.auratech/<repo>.env`, so you never need to commit it. Check it with `./configure.sh --show`.
 
 ## Step 6: Generate the new feature from the Jira ticket
 In Antigravity:
@@ -147,7 +145,7 @@ Then move the Jira ticket back to **To Do**.
 |---|---|
 | `main.py` | FastAPI: storefront `/`, Live Role Poll `/poll` `/vote` `/admin`, QR `/api/qr`; auto-mounts `campaign_router.py` if present |
 | `templates/`, `static/` | Existing UI (`static/images/fitbit-air.png` = official Google Store photo, also the Nano Banana reference) |
-| `DESIGN.md` | AuraTech design system for Stitch |
+| `DESIGN.md` | AuraTech design system (reference copy of the one in the shared Stitch project) |
 | `docs/JIRA_TICKET.md` | The ticket Antigravity implements |
 | `setup.sh`, `Dockerfile.base`, `cloudbuild.base.yaml` | One-time GCP project setup + pre-cached base image (deploys in ~15–20 s) |
 | `deploy.sh`, `mark-baseline.sh`, `rollback.sh` | Deploy, tag the clean baseline, restore it |
