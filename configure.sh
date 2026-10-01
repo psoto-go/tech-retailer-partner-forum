@@ -2,10 +2,11 @@
 # AuraTech Partner Kit — set YOUR values for the <YOUR_...> placeholders.
 #
 #   ./configure.sh                         # interactive: asks for each value (Enter keeps the current one)
-#   ./configure.sh --set KEY=VALUE [...]   # non-interactive (used by Antigravity), e.g. --set JIRA_TICKET_KEY=ABC-12
+#   ./configure.sh --set KEY=VALUE [...]   # non-interactive (used by Antigravity), e.g. --set STITCH_PROJECT_ID=123
 #   ./configure.sh --show                  # print your stored values
 #
-# KEYS: GCP_PROJECT_ID  JIRA_PROJECT_KEY  JIRA_TICKET_KEY  STITCH_PROJECT_ID  STITCH_DESIGN_SYSTEM_ID
+# KEYS: GCP_PROJECT_ID  STITCH_PROJECT_ID  STITCH_DESIGN_SYSTEM_ID
+# (Jira needs no config: Antigravity finds your ticket through your Jira MCP.)
 #
 # Values are stored OUTSIDE the repo in ~/.auratech/<repo>.env (never committed) and written into
 # .agent/rules, .agent/skills, Dockerfile and the scripts. Empty values keep their placeholder.
@@ -19,11 +20,9 @@ NAME="$(basename "${REMOTE:-${ROOT}}" .git)"
 CFG_DIR="${HOME}/.auratech"
 CFG="${CFG_DIR}/${NAME}.env"
 
-KEYS=(GCP_PROJECT_ID JIRA_PROJECT_KEY JIRA_TICKET_KEY STITCH_PROJECT_ID STITCH_DESIGN_SYSTEM_ID)
+KEYS=(GCP_PROJECT_ID STITCH_PROJECT_ID STITCH_DESIGN_SYSTEM_ID)
 declare -A HELP=(
   [GCP_PROJECT_ID]="Google Cloud project ID (e.g. my-project-123)                      [README Step 4]"
-  [JIRA_PROJECT_KEY]="Jira project key (e.g. ABC)                                        [README Step 1]"
-  [JIRA_TICKET_KEY]="Jira ticket Antigravity implements (e.g. ABC-12; empty if not created yet)"
   [STITCH_PROJECT_ID]="Stitch project ID, numbers only (empty until README Step 5)"
   [STITCH_DESIGN_SYSTEM_ID]="Stitch design system, e.g. assets/abc123 (empty until README Step 5)"
 )
@@ -72,7 +71,6 @@ fi
 # Basic validation (warn only).
 [[ -z "${NEW[STITCH_PROJECT_ID]}" || "${NEW[STITCH_PROJECT_ID]}" =~ ^[0-9]+$ ]] || echo "⚠️  STITCH_PROJECT_ID should be numbers only (no 'projects/')."
 [[ -z "${NEW[STITCH_DESIGN_SYSTEM_ID]}" || "${NEW[STITCH_DESIGN_SYSTEM_ID]}" == assets/* ]] || echo "⚠️  STITCH_DESIGN_SYSTEM_ID usually looks like 'assets/<id>'."
-[[ -z "${NEW[JIRA_TICKET_KEY]}" || -z "${NEW[JIRA_PROJECT_KEY]}" || "${NEW[JIRA_TICKET_KEY]}" == "${NEW[JIRA_PROJECT_KEY]}"-* ]] || echo "⚠️  JIRA_TICKET_KEY usually starts with '${NEW[JIRA_PROJECT_KEY]}-'."
 
 : > "${CFG}"
 for k in "${KEYS[@]}"; do printf '%s=%q\n' "${k}" "${NEW[$k]}" >> "${CFG}"; done
@@ -81,7 +79,7 @@ chmod 600 "${CFG}"
 for k in "${KEYS[@]}"; do export "OLD_${k}=${OLD[$k]}" "NEW_${k}=${NEW[$k]}"; done
 python3 - <<'PY'
 import os, re
-keys = ["GCP_PROJECT_ID", "JIRA_PROJECT_KEY", "JIRA_TICKET_KEY", "STITCH_PROJECT_ID", "STITCH_DESIGN_SYSTEM_ID"]
+keys = ["GCP_PROJECT_ID", "STITCH_PROJECT_ID", "STITCH_DESIGN_SYSTEM_ID"]
 old = {k: os.environ.get(f"OLD_{k}", "") for k in keys}
 new = {k: os.environ.get(f"NEW_{k}", "") for k in keys}
 

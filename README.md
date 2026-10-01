@@ -10,10 +10,8 @@ Brownfield demo for **Google Antigravity**. You start from an existing web app: 
 > | `<YOUR_GCP_PROJECT_ID>` | Your Google Cloud project ID | [Cloud console](https://console.cloud.google.com/) → project picker |
 > | `<YOUR_STITCH_PROJECT_ID>` | Your Stitch project (numbers only, no `projects/`) | Created in Step 5 |
 > | `<YOUR_STITCH_DESIGN_SYSTEM_ID>` | Your Stitch design system (`assets/…`) | Created in Step 5 |
-> | `<YOUR_JIRA_PROJECT_KEY>` | Your Jira project key (e.g. `ABC`) | Your Jira site |
-> | `<YOUR_JIRA_TICKET_KEY>` | The ticket Antigravity implements (e.g. `ABC-12`) | Created in Step 1 |
 >
-> **Set your values with one command:** `./configure.sh` asks for each value (leave blank the ones you don't have yet), stores them **outside the repo** in `~/.auratech/<repo>.env` and fills the placeholders. Re-run it any time; after a `git reset` it refills everything without questions. Antigravity uses `./configure.sh --set KEY=VALUE` when it creates the Jira ticket or the Stitch project for you.
+> **Set your values with one command:** `./configure.sh` asks for each value (leave blank the ones you don't have yet), stores them **outside the repo** in `~/.auratech/<repo>.env` and fills the placeholders. Re-run it any time; after a `git reset` it refills everything without questions. Antigravity uses `./configure.sh --set KEY=VALUE` when it creates the Stitch project for you. **Jira needs no configuration**: Antigravity finds your ticket through your Jira MCP.
 >
 > Antigravity is instructed to **ask you** for any placeholder that is still empty. It never stores tokens or API keys in the repo.
 
@@ -26,7 +24,7 @@ Brownfield demo for **Google Antigravity**. You start from an existing web app: 
 
 ```bash
 git clone <THIS_REPO_URL> auratech && cd auratech
-./configure.sh   # enter your GCP project ID and Jira project key now; the rest comes in Steps 1 and 5
+./configure.sh   # enter your GCP project ID now; the Stitch IDs come in Step 5
 ```
 
 ---
@@ -46,9 +44,9 @@ Antigravity connects to Jira through the **official Atlassian Rovo MCP server**.
 4. If your org restricts AI connectors, ask your Atlassian admin to allow it under **Atlassian Administration → Rovo → Rovo MCP server**.
 5. Test it in Antigravity: *"List my Jira projects."*
 6. Create the demo ticket. Ask Antigravity:
-   > *"Create the Jira ticket described in `docs/JIRA_TICKET.md` in my Jira project `<YOUR_JIRA_PROJECT_KEY>`, assign it to me, and save the new key with `./configure.sh --set JIRA_TICKET_KEY=<key>`."*
+   > *"Create the Jira ticket described in `docs/JIRA_TICKET.md` in my Jira project and assign it to me."*
 
-   You can also create the ticket manually by copy-pasting [`docs/JIRA_TICKET.md`](docs/JIRA_TICKET.md), then run `./configure.sh` and enter the ticket key.
+   You can also create the ticket manually by copy-pasting [`docs/JIRA_TICKET.md`](docs/JIRA_TICKET.md), and assign it to yourself. No key to configure: Antigravity discovers it.
 
 Official guide: [Get started with the Atlassian Rovo MCP server](https://support.atlassian.com/atlassian-ai-gateway/docs/get-started-with-the-atlassian-remote-mcp-server/).
 
@@ -113,7 +111,7 @@ Your values live in `~/.auratech/<repo>.env`, so you never need to commit them. 
 In Antigravity:
 > *"Do I have any tickets assigned to me?"*
 
-Antigravity finds `<YOUR_JIRA_TICKET_KEY>`, summarises it and asks whether to start. Say yes. It follows the 3-phase lifecycle in `.agent/rules/`:
+Antigravity finds your "Google Fitbit Air Challenge" ticket, summarises it and asks whether to start. Say yes. It follows the 3-phase lifecycle in `.agent/rules/`:
 1. Moves the ticket to **In Progress**, generates the *Google Fitbit Air Challenge* screen in Stitch and **stops for your approval** (Step 7).
 2. After approval: builds `campaign_router.py` (Nano Banana with the official Fitbit Air reference image) and `templates/campaign.html`, deploys with `./deploy.sh`, and asks whether you're happy and want to close the ticket.
 3. On your confirmation: comments the live URL on the ticket and moves it to **Done**.

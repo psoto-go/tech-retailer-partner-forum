@@ -30,11 +30,11 @@ Execute `./deploy.sh` directly from the workspace root:
 
 ## Step 3: Post-Deploy Live URL Verification & Mandatory User Sign-Off Prompt
 1. After `./deploy.sh` finishes, run a quick `curl` check against the deployed Cloud Run URL (`/`, `/poll`, `/campaign`, `/api/campaign/state`, `/api/qr?format=png`) to confirm `HTTP 200`.
-2. **DO NOT CLOSE OR TRANSITION THE JIRA TICKET (`<YOUR_JIRA_TICKET_KEY>`) YET!** Keep `<YOUR_JIRA_TICKET_KEY>` in **`In Progress`**.
+2. **DO NOT CLOSE OR TRANSITION THE JIRA TICKET (`{TICKET_KEY}`) YET!** Keep `{TICKET_KEY}` in **`In Progress`**.
 3. Present the live Cloud Run `/campaign` URL to the user and **explicitly ask**:
-   > *"Are you happy with the live implementation, and would you like me to close Jira ticket <YOUR_JIRA_TICKET_KEY>?"*
+   > *"Are you happy with the live implementation, and would you like me to close Jira ticket {TICKET_KEY}?"*
 
-## Step 4: Phase 3 — Close Jira Ticket (`<YOUR_JIRA_TICKET_KEY>` -> `Done`) Upon User Confirmation
+## Step 4: Phase 3 — Close Jira Ticket (`{TICKET_KEY}` -> `Done`) Upon User Confirmation
 Once the user replies confirming they are happy and want to close the ticket:
-1. Call the Atlassian / Jira MCP (`addCommentToJiraIssue`) on `<YOUR_JIRA_TICKET_KEY>` with a concise summary including the live Cloud Run `/campaign` URL, the Google Stitch Screen resource ID, and the verified endpoints.
-2. Call `getTransitionsForJiraIssue` and `transitionJiraIssue` to move `<YOUR_JIRA_TICKET_KEY>` to **`Done`**.
+1. Call the Atlassian / Jira MCP (`addCommentToJiraIssue`) on `{TICKET_KEY}` with a concise summary including the live Cloud Run `/campaign` URL, the Google Stitch Screen resource ID, and the verified endpoints.
+2. Call `getTransitionsForJiraIssue` and `transitionJiraIssue` to move `{TICKET_KEY}` to **`Done`**.

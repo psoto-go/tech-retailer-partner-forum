@@ -1,6 +1,6 @@
 # Jira ticket — Google Fitbit Air Challenge
 
-Antigravity creates this ticket in **your** Jira project during README Step 1 (or copy/paste it manually). The resulting key (e.g. `ABC-12`) replaces `<YOUR_JIRA_TICKET_KEY>` in `.agent/rules/` and `.agent/skills/`.
+Antigravity creates this ticket in **your** Jira project during README Step 1 (or copy/paste it manually). Assign it to yourself: Antigravity discovers it through your Jira MCP (no key to configure).
 
 - **Issue type:** Story (or Task)
 - **Assignee:** you

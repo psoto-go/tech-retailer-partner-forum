@@ -1,12 +1,13 @@
 # AuraTech Workspace Architecture, Jira Lifecycle & Speed Execution Rules
 
 ## 0. Placeholders & Credentials Policy (READ FIRST)
-- This repository ships WITHOUT personal information. User-specific values are placeholders: `<YOUR_GCP_PROJECT_ID>`, `<YOUR_STITCH_PROJECT_ID>`, `<YOUR_STITCH_DESIGN_SYSTEM_ID>`, `<YOUR_JIRA_PROJECT_KEY>`, `<YOUR_JIRA_TICKET_KEY>`.
-- Before using any of them, check whether it is still an unfilled `<YOUR_...>` placeholder. If it is, STOP and ask the user for their own value, pointing to the matching README step (Jira → Step 1, Stitch → Steps 2 and 5, Google Cloud → Step 4). Never invent IDs. Once the user provides the value (or you create it, e.g. the Stitch project in README Step 5 or the Jira ticket in Step 1), save it with `./configure.sh --set KEY=VALUE` (keys: `GCP_PROJECT_ID`, `JIRA_PROJECT_KEY`, `JIRA_TICKET_KEY`, `STITCH_PROJECT_ID`, `STITCH_DESIGN_SYSTEM_ID`). This stores the value outside the repo (`~/.auratech/`) and fills `.agent/rules/`, `.agent/skills/`, the `Dockerfile` and the scripts. Do not hand-edit placeholders and never commit the filled values.
+- This repository ships WITHOUT personal information. User-specific values are placeholders: `<YOUR_GCP_PROJECT_ID>`, `<YOUR_STITCH_PROJECT_ID>`, `<YOUR_STITCH_DESIGN_SYSTEM_ID>`.
+- **Jira needs NO configuration**: the user's Jira MCP is already connected in Antigravity. `{TICKET_KEY}` below is NOT a placeholder to fill; it is the key of the Jira ticket you discover at runtime (Section 2). Never ask the user for a Jira project key or ticket key.
+- Before using any of them, check whether it is still an unfilled `<YOUR_...>` placeholder. If it is, STOP and ask the user for their own value, pointing to the matching README step (Stitch → Steps 2 and 5, Google Cloud → Step 4). Never invent IDs. Once the user provides the value (or you create it, e.g. the Stitch project in README Step 5), save it with `./configure.sh --set KEY=VALUE` (keys: `GCP_PROJECT_ID`, `STITCH_PROJECT_ID`, `STITCH_DESIGN_SYSTEM_ID`). This stores the value outside the repo (`~/.auratech/`) and fills `.agent/rules/`, `.agent/skills/`, the `Dockerfile` and the scripts. Do not hand-edit placeholders and never commit the filled values.
 - NEVER write credentials into the repository: no Jira/Atlassian tokens, no Stitch API keys, no OAuth tokens, no personal emails or account names. Credentials live only in the user's local Antigravity `mcp_config.json` and in `gcloud`. If a connection fails, give the user the how-to from the README and ask them to fix it with their own account.
 
 ### README bootstrap tasks (when the user asks for them)
-- **Step 1 — Create the Jira ticket**: create an issue in project `<YOUR_JIRA_PROJECT_KEY>` with the Summary and Description of `docs/JIRA_TICKET.md`, assign it to the current user (status To Do), then run `./configure.sh --set JIRA_TICKET_KEY=<new key>`.
+- **Step 1 — Create the Jira ticket** (only if the user asks): list the user's Jira projects via the Jira MCP; if there is exactly one use it, otherwise ask which one. Create an issue with the Summary and Description of `docs/JIRA_TICKET.md`, assign it to the current user (status To Do). Nothing to save: the ticket is discovered at runtime.
 - **Step 5 — Stitch + baseline deploy**: Stitch MCP `create_project` (title "AuraTech Storefront") → `upload_design_md` (base64 of `DESIGN.md`) → `create_design_system_from_design_md` → `generate_screen_from_text` (a reference "AuraTech Storefront" screen matching `templates/index.html`); save the new `projectId` and `designSystem` with `./configure.sh --set STITCH_PROJECT_ID=<id> STITCH_DESIGN_SYSTEM_ID=assets/<id>`; then run `./deploy.sh` and `./mark-baseline.sh` and verify `/` 200, `/poll` 200, `/campaign` 404.
 
 ---
@@ -15,7 +16,7 @@
 You are working in the **AuraTech — Official Google Hardware Partner** web application repository (`FastAPI` + `Jinja2` + `Tailwind CSS` deployed on Google Cloud Run in the project configured in `gcloud` / `GOOGLE_CLOUD_PROJECT`, region `europe-west1`).
 
 - **Google Cloud project**: `<YOUR_GCP_PROJECT_ID>`
-- **Jira**: project `<YOUR_JIRA_PROJECT_KEY>`, ticket `<YOUR_JIRA_TICKET_KEY>` (created from `docs/JIRA_TICKET.md`)
+- **Jira**: via the user's Jira MCP (no config). Ticket `{TICKET_KEY}` = the assigned ticket whose summary contains "Google Fitbit Air Challenge" (created from `docs/JIRA_TICKET.md`)
 - **Cloud Run Service**: `partner-forum-2026` (deployed via `./deploy.sh`)
 - **Google Stitch `projectId` (for this repository)**: `"<YOUR_STITCH_PROJECT_ID>"`
 - **Google Stitch `designSystem` (for this repository)**: `"<YOUR_STITCH_DESIGN_SYSTEM_ID>"` (AuraTech Minimal Hardware)
@@ -28,17 +29,17 @@ You are working in the **AuraTech — Official Google Hardware Partner** web app
 
 ## 2. Jira Ticket Discovery ("Do I have any tickets assigned to me?")
 Whenever the user asks if they have any tickets assigned to them (e.g. *"do i have any tickets assigned to me?"*, *"check my Jira tickets"*, *"what tickets do I have?"*):
-1. Immediately query the **Atlassian / Jira MCP** (`searchJiraIssuesUsingJql` with `assignee = currentUser() AND statusCategory != Done ORDER BY updated DESC`, falling back to `project = <YOUR_JIRA_PROJECT_KEY> ORDER BY updated DESC` if needed) and read the full issue details (e.g. `<YOUR_JIRA_TICKET_KEY>`).
-2. Present a concise summary of the assigned ticket (`<YOUR_JIRA_TICKET_KEY>`: Google Fitbit Air Challenge — Campaign Studio & Real-Time Voting Leaderboard) and ask if you should start working on it (**Phase 1: Transition to `In Progress` & generate the Google Stitch UI Design Proposal**).
+1. Immediately query the **Atlassian / Jira MCP** (`searchJiraIssuesUsingJql` with `assignee = currentUser() AND statusCategory != Done ORDER BY updated DESC`, falling back to `summary ~ "Fitbit Air Challenge" ORDER BY updated DESC` if needed) and read the full issue details. The key of the "Google Fitbit Air Challenge" ticket is `{TICKET_KEY}` for the rest of the session.
+2. Present a concise summary of the assigned ticket (`{TICKET_KEY}`: Google Fitbit Air Challenge — Campaign Studio & Real-Time Voting Leaderboard) and ask if you should start working on it (**Phase 1: Transition to `In Progress` & generate the Google Stitch UI Design Proposal**).
 3. Do not ask the user for Stitch IDs or file paths **once the placeholders are filled** (they are defined above and in `.agent/skills/`). If a `<YOUR_...>` placeholder is still unfilled, follow Section 0.
 
 ---
 
-## 3. Mandatory 3-Phase Execution Workflow for `<YOUR_JIRA_TICKET_KEY>` / Fitbit Campaign
-Whenever the user asks you to work on the assigned Jira ticket (`<YOUR_JIRA_TICKET_KEY>` / Fitbit Employee Marketing Campaign), you MUST execute the 3 skills in `.agent/skills/` following this strict 3-phase lifecycle:
+## 3. Mandatory 3-Phase Execution Workflow for `{TICKET_KEY}` / Fitbit Campaign
+Whenever the user asks you to work on the assigned Jira ticket (`{TICKET_KEY}` / Fitbit Employee Marketing Campaign), you MUST execute the 3 skills in `.agent/skills/` following this strict 3-phase lifecycle:
 
 ### Phase 1: Move Jira to `In Progress`, Design in Google Stitch & Pause for Visual Approval (`frontend-skill` — Phase 1)
-1. **Transition Jira Ticket to `In Progress`**: Call the Atlassian / Jira MCP (`getTransitionsForJiraIssue` -> `transitionJiraIssue`) to move `<YOUR_JIRA_TICKET_KEY>` to **`In Progress`**.
+1. **Transition Jira Ticket to `In Progress`**: Call the Atlassian / Jira MCP (`getTransitionsForJiraIssue` -> `transitionJiraIssue`) to move `{TICKET_KEY}` to **`In Progress`**.
 2. Read `.agent/skills/frontend-skill/SKILL.md` and inspect the `<head>`, `<header>`, and `<footer>` of `templates/poll.html` and `templates/index.html`.
 3. Call the **Google Stitch MCP** tool `generate_screen_from_text` using:
    - `projectId`: `"<YOUR_STITCH_PROJECT_ID>"`
@@ -65,11 +66,11 @@ Once the user approves the Stitch design proposal:
    - **NEVER create a `.venv` or run `pip install`** (all packages are pre-installed).
    - Run `python3 -m py_compile main.py campaign_router.py` and execute `./deploy.sh` to deploy directly to Cloud Run in ~15–20 seconds.
 4. **STRICT BAN ON AUTO-CLOSING JIRA IN PHASE 2**:
-   - Keep `<YOUR_JIRA_TICKET_KEY>` in **`In Progress`** when `./deploy.sh` finishes. Do **NOT** transition `<YOUR_JIRA_TICKET_KEY>` to `In Review` or `Done` automatically!
+   - Keep `{TICKET_KEY}` in **`In Progress`** when `./deploy.sh` finishes. Do **NOT** transition `{TICKET_KEY}` to `In Review` or `Done` automatically!
    - Present the live Cloud Run `/campaign` URL to the user and **PAUSE to ask**:
-     *"Are you happy with the live implementation, and would you like me to close Jira ticket <YOUR_JIRA_TICKET_KEY>?"*
+     *"Are you happy with the live implementation, and would you like me to close Jira ticket {TICKET_KEY}?"*
 
 ### Phase 3: Close Jira Ticket After User Confirmation
 Only after the user confirms they are happy with the implementation and want to close the ticket:
-1. Add a comment to `<YOUR_JIRA_TICKET_KEY>` via Atlassian / Jira MCP (`addCommentToJiraIssue`) with the live Cloud Run `/campaign` URL, the Google Stitch screen resource name, and a summary of the implemented endpoints.
-2. Transition `<YOUR_JIRA_TICKET_KEY>` to **`Done`** (`getTransitionsForJiraIssue` -> `transitionJiraIssue`) and confirm completion to the user.
+1. Add a comment to `{TICKET_KEY}` via Atlassian / Jira MCP (`addCommentToJiraIssue`) with the live Cloud Run `/campaign` URL, the Google Stitch screen resource name, and a summary of the implemented endpoints.
+2. Transition `{TICKET_KEY}` to **`Done`** (`getTransitionsForJiraIssue` -> `transitionJiraIssue`) and confirm completion to the user.

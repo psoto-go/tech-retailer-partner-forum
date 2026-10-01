@@ -5,7 +5,7 @@ description: Designs the AuraTech Fitbit Employee Marketing Campaign UI live in 
 
 # AuraTech Frontend & Google Stitch Skill (`frontend-skill`)
 
-Use this skill whenever designing and building the frontend for the **Fitbit Employee Marketing Campaign** (Jira ticket `<YOUR_JIRA_TICKET_KEY>` / `AT-2026`).
+Use this skill whenever designing and building the frontend for the **Fitbit Employee Marketing Campaign** (the "Google Fitbit Air Challenge" Jira ticket `{TICKET_KEY}`, discovered at runtime via the Jira MCP).
 
 > **CRITICAL RULE — NO HARDCODED UI, 100% STITCH-GENERATED `<main>` + EXACT `poll.html` SHELL**:
 > 1. You must generate the UI dynamically in **Google Stitch MCP** (`generate_screen_from_text`) following the existing context of `templates/index.html` and `templates/poll.html`.
