@@ -13,6 +13,8 @@ Brownfield demo for **Google Antigravity**. You start from an existing web app: 
 > | `<YOUR_JIRA_PROJECT_KEY>` | Your Jira project key (e.g. `ABC`) | Your Jira site |
 > | `<YOUR_JIRA_TICKET_KEY>` | The ticket Antigravity implements (e.g. `ABC-12`) | Created in Step 1 |
 >
+> **Set your values with one command:** `./configure.sh` asks for each value (leave blank the ones you don't have yet), stores them **outside the repo** in `~/.auratech/<repo>.env` and fills the placeholders. Re-run it any time; after a `git reset` it refills everything without questions. Antigravity uses `./configure.sh --set KEY=VALUE` when it creates the Jira ticket or the Stitch project for you.
+>
 > Antigravity is instructed to **ask you** for any placeholder that is still empty. It never stores tokens or API keys in the repo.
 
 ## Prerequisites
@@ -24,6 +26,7 @@ Brownfield demo for **Google Antigravity**. You start from an existing web app: 
 
 ```bash
 git clone <THIS_REPO_URL> auratech && cd auratech
+./configure.sh   # enter your GCP project ID and Jira project key now; the rest comes in Steps 1 and 5
 ```
 
 ---
@@ -43,9 +46,9 @@ Antigravity connects to Jira through the **official Atlassian Rovo MCP server**.
 4. If your org restricts AI connectors, ask your Atlassian admin to allow it under **Atlassian Administration → Rovo → Rovo MCP server**.
 5. Test it in Antigravity: *"List my Jira projects."*
 6. Create the demo ticket. Ask Antigravity:
-   > *"Create the Jira ticket described in `docs/JIRA_TICKET.md` in my Jira project `<YOUR_JIRA_PROJECT_KEY>`, assign it to me, and replace `<YOUR_JIRA_PROJECT_KEY>` and `<YOUR_JIRA_TICKET_KEY>` in `.agent/rules/` and `.agent/skills/` with the real values."*
+   > *"Create the Jira ticket described in `docs/JIRA_TICKET.md` in my Jira project `<YOUR_JIRA_PROJECT_KEY>`, assign it to me, and save the new key with `./configure.sh --set JIRA_TICKET_KEY=<key>`."*
 
-   You can also create the ticket manually by copy-pasting [`docs/JIRA_TICKET.md`](docs/JIRA_TICKET.md), then replace the two placeholders yourself.
+   You can also create the ticket manually by copy-pasting [`docs/JIRA_TICKET.md`](docs/JIRA_TICKET.md), then run `./configure.sh` and enter the ticket key.
 
 Official guide: [Get started with the Atlassian Rovo MCP server](https://support.atlassian.com/atlassian-ai-gateway/docs/get-started-with-the-atlassian-remote-mcp-server/).
 
@@ -87,7 +90,7 @@ gcloud config set project <YOUR_GCP_PROJECT_ID>
 ./setup.sh                  # one-time: APIs, Artifact Registry, Vertex AI access, pre-cached base image
 ./scripts/check-cloud.sh    # ✅/❌ checks: account, project, billing, APIs, Cloud Run, real Nano Banana test image
 ```
-Then replace `<YOUR_GCP_PROJECT_ID>` in `deploy.sh`, `rollback.sh`, `mark-baseline.sh` and `scripts/check-cloud.sh`, or just ask Antigravity to do it. `setup.sh` already rewrites the `FROM` line of the `Dockerfile` for you.
+If you skipped it at clone time, run `./configure.sh` and enter your GCP project ID (it fills `deploy.sh`, `rollback.sh`, `mark-baseline.sh`, `scripts/check-cloud.sh` and the `Dockerfile`).
 
 Do not continue until `check-cloud.sh` prints **🎉 All checks passed**.
 
@@ -95,7 +98,7 @@ Useful docs: [Cloud Run deploy from source](https://cloud.google.com/run/docs/de
 
 ## Step 5: Create the existing webpage in Stitch and deploy it to Cloud Run
 The code in `templates/` is the source of truth for the existing web. Stitch gets the same design system, so the new feature matches it. Ask Antigravity:
-> *"Set up Stitch for this repo: create a Stitch project called 'AuraTech Storefront', upload `DESIGN.md` and create the design system from it, generate a reference 'AuraTech Storefront' screen, then replace `<YOUR_STITCH_PROJECT_ID>` and `<YOUR_STITCH_DESIGN_SYSTEM_ID>` in `.agent/rules/` and `.agent/skills/`. Then deploy the existing web with `./deploy.sh` and mark it as the baseline with `./mark-baseline.sh`."*
+> *"Set up Stitch for this repo: create a Stitch project called 'AuraTech Storefront', upload `DESIGN.md` and create the design system from it, generate a reference 'AuraTech Storefront' screen, then save both IDs with `./configure.sh --set STITCH_PROJECT_ID=<id> STITCH_DESIGN_SYSTEM_ID=assets/<id>`. Then deploy the existing web with `./deploy.sh` and mark it as the baseline with `./mark-baseline.sh`."*
 
 This uses the Stitch MCP tools `create_project` → `upload_design_md` → `create_design_system_from_design_md` → `generate_screen_from_text`.
 
@@ -104,7 +107,7 @@ Check the live URL printed by `deploy.sh`:
 - `/poll` shows the Live Role Poll.
 - `/campaign` returns **404**. That's expected: the feature doesn't exist yet.
 
-Commit your filled-in placeholders in **your own copy** of the repo if you want to keep them.
+Your values live in `~/.auratech/<repo>.env`, so you never need to commit them. Check them with `./configure.sh --show`.
 
 ## Step 6: Generate the new feature from the Jira ticket
 In Antigravity:
@@ -137,6 +140,7 @@ Reply *"approved"*, or ask for changes and it will iterate in Stitch before writ
 ```bash
 ./rollback.sh                                                      # Cloud Run back to the 'baseline' revision (seconds)
 git fetch origin && git reset --hard origin/main && git clean -fd  # remove the generated feature files locally
+./configure.sh                                                     # refill your values (no questions asked)
 ```
 Then move the Jira ticket back to **To Do**.
 
