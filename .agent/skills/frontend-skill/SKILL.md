@@ -19,7 +19,11 @@ Use this skill whenever designing and building the frontend for the **Fitbit Emp
 ### Step 1.1: Inspect `templates/poll.html` and `templates/index.html`
 Read `templates/poll.html` (lines 1–165 and 275–295) and `templates/index.html` (lines 115–150) so you have the exact AuraTech `<head>` Tailwind configuration, `<header>` TopNavBar structure, and `<footer>`.
 
-### Step 1.2: Call Google Stitch MCP (`generate_screen_from_text`)
+### Step 1.2: Pre-flight — verify access to the shared Stitch project
+Call `get_project` with `name: "projects/11024850840388252926"`. The response must succeed and list the design system `assets/e0fecde15a2549a9b793168efec1fa4f`.
+If it fails (*permission denied*, *not found*): **STOP**. Tell the user to `git pull` (stale project ID) and to verify that the Google account that generated the Stitch API key in `mcp_config.json` can open the shared project (README → Troubleshooting). Do NOT call `create_project`, do NOT pick another project via `list_projects`, do NOT generate anywhere other than `11024850840388252926`.
+
+### Step 1.3: Call Google Stitch MCP (`generate_screen_from_text`)
 Call `generate_screen_from_text` using the Stitch project for this repository:
 
 - **`projectId`**: `"11024850840388252926"`
@@ -48,7 +52,7 @@ Call `generate_screen_from_text` using the Stitch project for this repository:
   3. Footer: Minimalist AuraTech footer matching Live Role Poll with Storefront and Live Role Poll links only. **No reset, clear or delete controls anywhere on the page**: attendees open this URL on their phones and must never be able to wipe the campaign.
   ```
 
-### Step 1.3: Present `stitch_design_proposal.md` Artifact & Ask for Approval
+### Step 1.4: Present `stitch_design_proposal.md` Artifact & Ask for Approval
 1. From the `generate_screen_from_text` response (or `get_screen`), extract `screenshot.downloadUrl` and `htmlCode.downloadUrl`.
 2. Download the screenshot image into the artifact directory (or workspace root) using `curl -sL "<screenshot.downloadUrl>" -o <path>/stitch_campaign_preview.png`.
 3. Create the artifact `stitch_design_proposal.md` embedding the downloaded screenshot (`![AuraTech Fitbit Campaign Studio](/absolute/path/to/stitch_campaign_preview.png)`) and summarizing the Stitch screen resource ID and layout components.

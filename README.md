@@ -165,6 +165,14 @@ curl -s -X POST "$SERVICE_URL/api/admin/reset-votes"    # Live Role Poll back to
 curl -s -X POST "$SERVICE_URL/api/campaign/reset"       # Fitbit Air Challenge back to 0 images / 0 votes
 ```
 
+## Troubleshooting: Antigravity generated the screen in another Stitch project
+Symptom: the Stitch proposal shows `projects/<something else>/screens/...` instead of `projects/11024850840388252926/...`, or you cannot find the screen in the Stitch UI.
+Cause: the Stitch API key in `mcp_config.json` could not open `11024850840388252926` (stale checkout with an old project ID, or the key was generated under a Google account the project is not shared with), and Antigravity fell back to a new project.
+Fix (2 minutes), then start a **new chat**:
+1. `git pull` (or `./reset-demo.sh`) so `.agent/` carries the current project ID `11024850840388252926`.
+2. In Antigravity ask: *"List my Stitch projects."* → `11024850840388252926` must be in the list. If not: open [stitch.withgoogle.com](https://stitch.withgoogle.com) with the account the project is shared with, regenerate the API key there, paste it into `mcp_config.json`, refresh MCP servers, repeat.
+3. The repo rules now hard-stop instead of falling back: Antigravity will refuse to `create_project` or use another `projectId`.
+
 ## Repository map
 | File | Purpose |
 |---|---|

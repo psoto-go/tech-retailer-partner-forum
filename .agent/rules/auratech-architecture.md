@@ -3,6 +3,7 @@
 ## 0. Placeholders & Credentials Policy (READ FIRST)
 - This repository ships WITHOUT personal information. The only user-specific value is the placeholder `<YOUR_GCP_PROJECT_ID>` (set with `./configure.sh`).
 - **Stitch needs NO configuration**: this repository uses the shared Stitch project `11024850840388252926` with design system `assets/e0fecde15a2549a9b793168efec1fa4f` (AuraTech Minimal Hardware). Never create a new Stitch project or design system and never ask the user for Stitch IDs; only the Stitch API key lives in the user's local `mcp_config.json` (README Step 2).
+- **Stitch hard-stop (no silent fallback)**: before `generate_screen_from_text`, run the pre-flight `get_project` with `name: "projects/11024850840388252926"`. If it (or the generation) fails with *permission denied* / *not found*, STOP immediately and tell the user: (a) run `git pull` (a stale checkout may carry an old project ID) and (b) make sure the Google account that created the Stitch API key in `mcp_config.json` has access to the shared project (README → Troubleshooting). NEVER call `create_project`, NEVER use `list_projects` to pick another project, NEVER generate in any `projectId` other than `11024850840388252926`, even if the user says "just continue" — ask them to fix access first.
 - **Jira needs NO configuration**: the user's Jira MCP is already connected in Antigravity. `{TICKET_KEY}` below is NOT a placeholder to fill; it is the key of the Jira ticket you discover at runtime (Section 2). Never ask the user for a Jira project key or ticket key.
 - Before using any of them, check whether it is still an unfilled `<YOUR_...>` placeholder. If it is, STOP and ask the user for their own value, pointing to README Step 4 (Google Cloud). Never invent IDs. Once the user provides it, save it with `./configure.sh --set GCP_PROJECT_ID=<id>`. This stores the value outside the repo (`~/.auratech/`) and fills `.agent/rules/`, `.agent/skills/`, the `Dockerfile` and the scripts. Do not hand-edit placeholders and never commit the filled values.
 - NEVER write credentials into the repository: no Jira/Atlassian tokens, no Stitch API keys, no OAuth tokens, no personal emails or account names. Credentials live only in the user's local Antigravity `mcp_config.json` and in `gcloud`. If a connection fails, give the user the how-to from the README and ask them to fix it with their own account.
@@ -42,14 +43,15 @@ Whenever the user asks you to work on the assigned Jira ticket (`{TICKET_KEY}` /
 ### Phase 1: Move Jira to `In Progress`, Design in Google Stitch & Pause for Visual Approval (`frontend-skill` — Phase 1)
 1. **Transition Jira Ticket to `In Progress`**: Call the Atlassian / Jira MCP (`getTransitionsForJiraIssue` -> `transitionJiraIssue`) to move `{TICKET_KEY}` to **`In Progress`**.
 2. Read `.agent/skills/frontend-skill/SKILL.md` and inspect the `<head>`, `<header>`, and `<footer>` of `templates/poll.html` and `templates/index.html`.
-3. Call the **Google Stitch MCP** tool `generate_screen_from_text` using:
+3. **Pre-flight**: call the Stitch MCP `get_project` with `name: "projects/11024850840388252926"` and confirm the response lists design system `assets/e0fecde15a2549a9b793168efec1fa4f`. On any error → STOP and apply the *Stitch hard-stop* rule from Section 0 (no `create_project`, no other `projectId`).
+4. Call the **Google Stitch MCP** tool `generate_screen_from_text` using:
    - `projectId`: `"11024850840388252926"`
    - `designSystem`: `"assets/e0fecde15a2549a9b793168efec1fa4f"`
    - `deviceType`: `"DESKTOP"`
    - `modelId`: `"GEMINI_3_8_FLASH"`
    - Exact prompt from `.agent/skills/frontend-skill/SKILL.md` (preserving the exact AuraTech TopNavBar: `Store | Fitbit | Wearables | Accessories | Live Role Poll | Fitbit Campaign | Support` with NO dark top announcement bar and NO `"Catalog"` or `"Community Poll"` links).
-4. Download the generated screen's `screenshot.downloadUrl` and present the visual design proposal in an artifact (`stitch_design_proposal.md`) to the user.
-5. **PAUSE and ask the user for visual approval** before writing the backend/frontend code.
+5. Download the generated screen's `screenshot.downloadUrl` and present the visual design proposal in an artifact (`stitch_design_proposal.md`) to the user.
+6. **PAUSE and ask the user for visual approval** before writing the backend/frontend code.
 
 ### Phase 2: Implement Code from Stitch HTML + Deploy to Cloud Run + Ask Sign-Off (`backend-skill` + `frontend-skill` Phase 2 + `deploy-skill`)
 Once the user approves the Stitch design proposal:
