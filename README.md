@@ -153,6 +153,13 @@ git fetch origin && git reset --hard origin/main && git clean -fd  # remove the 
 ```
 Then move the Jira ticket back to **To Do**.
 
+**Reset the live boards (presenter only).** The attendee-facing pages have no reset buttons on purpose (anyone with the URL could wipe the session). Reset from your terminal:
+```bash
+SERVICE_URL=$(gcloud run services describe partner-forum-2026 --region europe-west1 --format='value(status.url)')
+curl -s -X POST "$SERVICE_URL/api/admin/reset-votes"    # Live Role Poll back to 0 votes
+curl -s -X POST "$SERVICE_URL/api/campaign/reset"       # Fitbit Air Challenge back to 0 images / 0 votes
+```
+
 ## Repository map
 | File | Purpose |
 |---|---|

@@ -288,7 +288,6 @@
 <a class="text-on-surface-variant hover:text-primary transition-colors" href="/vote">Mobile Vote</a>
 <a class="text-on-surface-variant hover:text-primary transition-colors" href="/admin">Admin Panel</a>
 <button class="text-primary hover:underline font-semibold text-body-sm" onclick="simulateVotes(5)">+5 Demo Votes</button>
-<button class="text-error hover:underline font-semibold text-body-sm ml-2" onclick="resetPollVotes()">Reset to 0 Votes</button>
 </div>
 </div>
 </footer>
@@ -502,20 +501,6 @@
       }
     } catch (e) {
       console.error('Vote error:', e);
-    }
-  }
-
-  async function resetPollVotes() {
-    try {
-      const res = await fetch('/api/admin/reset-votes', { method: 'POST' });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.state) renderPollState(data.state);
-        else await refreshState();
-        document.getElementById('live-event-feed').textContent = 'All votes reset to 0.';
-      }
-    } catch (e) {
-      console.error('Reset error:', e);
     }
   }
 

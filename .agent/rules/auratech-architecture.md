@@ -75,3 +75,7 @@ Once the user approves the Stitch design proposal:
 Only after the user confirms they are happy with the implementation and want to close the ticket:
 1. Add a comment to `{TICKET_KEY}` via Atlassian / Jira MCP (`addCommentToJiraIssue`) with the live Cloud Run `/campaign` URL, the Google Stitch screen resource name, and a summary of the implemented endpoints.
 2. Transition `{TICKET_KEY}` to **`Done`** (`getTransitionsForJiraIssue` -> `transitionJiraIssue`) and confirm completion to the user.
+
+## 7. Attendee Safety: No Destructive Controls in the UI
+- Attendee-facing pages (`/`, `/poll`, `/vote`, `/campaign`) must NEVER expose reset, clear or delete buttons/links, nor any client-side call to `POST /api/campaign/reset` or `POST /api/admin/reset-votes`. Hundreds of attendees open these URLs on their phones.
+- Resets are presenter-only and done from a terminal with `curl -X POST <SERVICE_URL>/api/campaign/reset` (and `/api/admin/reset-votes`), as documented in the README. Keep the endpoints; remove the buttons.

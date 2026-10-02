@@ -45,7 +45,7 @@ Call `generate_screen_from_text` using the Stitch project for this repository:
        b) Vertex AI • Nano Banana (gemini-3.1-flash-image) Prompt Studio Card: Two separate clean text inputs for "Name" and "Company" (both completely blank with NO placeholder text inside the inputs), a small "Official product reference" thumbnail of the Google Fitbit Air (screenless woven fabric band), creative campaign scene prompt textarea (also blank with NO placeholder text), 3 scene chips (Morning Run, Deep Sleep, Office to Gym) and NO device selector pills (the product is always Google Fitbit Air), and primary button "Generate Fitbit Air Campaign Image".
      - Right Column (8 cols):
        Live Campaign Leaderboard header bar with total submissions counter, followed by a 2-column responsive grid of generated Google Fitbit Air campaign cards ranked by votes (#1 LEADING badge, 4:3 campaign visual, prompt caption, creator Name & Company, vote count + percentage progress bar, and 1-click "Vote for Campaign" button).
-  3. Footer: Minimalist AuraTech footer matching Live Role Poll with Storefront, Live Role Poll, and Reset Campaign links.
+  3. Footer: Minimalist AuraTech footer matching Live Role Poll with Storefront and Live Role Poll links only. **No reset, clear or delete controls anywhere on the page**: attendees open this URL on their phones and must never be able to wipe the campaign.
   ```
 
 ### Step 1.3: Present `stitch_design_proposal.md` Artifact & Ask for Approval
@@ -89,7 +89,7 @@ Construct `templates/campaign.html` by combining:
      - **Nano Banana Image Generation (`POST /api/campaign/generate`)**: Wire the `Name` input, `Company` input, `Prompt` input, scene chips (Morning Run, Deep Sleep, Office to Gym — clicking a chip fills/appends the scene to the prompt), and Generate button to send `POST /api/campaign/generate` with `{ prompt, name, company, author: company ? (name + ' (' + company + ')') : name }`, disabling the button with a `"Generating with Nano Banana..."` spinner while awaiting the response, then calling `renderCampaignState(data.state)`.
      - **Strict 1-Vote-Per-Employee Voting (`POST /api/campaign/vote`)**: Wire each card's vote button to send `POST /api/campaign/vote` with `{ submissionId, voterId }` (where `voterId` is persisted in `localStorage.getItem('auratech_campaign_voter_id')` + `pf_voter_id` cookie). If the employee clicks vote again on the same card (`HTTP 400`), display the error banner (`data.error`).
 3. **Verbatim `<footer>` from `templates/poll.html` (lines 278–294)**:
-   - Include a `"Reset Campaign"` button (`POST /api/campaign/reset`) in the footer for live demo resets.
+   - **NEVER render a "Reset Campaign" button, link or any UI call to `POST /api/campaign/reset`.** Resets are presenter-only, done from a terminal (`curl -X POST <SERVICE_URL>/api/campaign/reset`, see README).
 
 ### Step 2.3: Add Single `"Fitbit Campaign"` Link to `templates/index.html` and `templates/poll.html`
 Use `replace_file_content` to insert ONLY the single `"Fitbit Campaign"` link right after the `Live Role Poll` link inside `<nav>` in both `templates/index.html` and `templates/poll.html`:
