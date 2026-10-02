@@ -2,6 +2,19 @@
 
 Brownfield demo for **Google Antigravity**. You start from an existing web app: **AuraTech**, a fictional official Google hardware partner storefront with a Live Role Poll. Antigravity picks up a **Jira ticket**, designs the new feature in **Google Stitch**, waits for your approval, implements it and deploys it to **Cloud Run**. The feature is the *Google Fitbit Air Challenge*, where attendees generate campaign images with **Vertex AI Nano Banana** and vote live.
 
+## Architecture
+
+![AuraTech × Antigravity demo architecture](docs/architecture.png)
+
+1. **Developer → Antigravity**: the 4 demo prompts drive the whole session.
+2. **Antigravity → Jira Cloud** (Atlassian Rovo MCP): finds your *Google Fitbit Air Challenge* ticket and moves it **To Do → In Progress → Done**.
+3. **Antigravity → Google Stitch** (Stitch MCP): generates the campaign screen from the shared AuraTech design system and waits for your approval.
+4. **`./deploy.sh` → Cloud Build → Cloud Run**: `gcloud run deploy --source` on the pre-cached base image from Artifact Registry; a new revision serves the Storefront `/`, the Live Role Poll `/poll` and the new `/campaign` (baseline tag + `./rollback.sh`).
+5. **Fitbit Air Challenge → Vertex AI Nano Banana** (`gemini-3.1-flash-image`): generates each attendee's campaign image from the official Fitbit Air reference photo, authenticated with the Cloud Run service identity.
+6. **Audience phones → Cloud Run** over HTTPS after scanning the QR on the stage screen: generate, vote, live leaderboard.
+
+📎 Session takeaways: [Partner Forum Platform Takeaways](https://docs.google.com/presentation/d/1N0hGiLZYCsasegMNkfARWSR2T4soOZ_k/edit)
+
 > [!IMPORTANT]
 > This repo contains **no credentials and no personal identifiers**. Every value that belongs to you is a placeholder:
 >
