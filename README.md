@@ -145,15 +145,20 @@ Reply *"approved"*, or ask for changes and it will iterate in Stitch before writ
 
 ---
 
-## Rehearse again (reset to the clean baseline)
+## Between sessions / rehearse again (≈ 2 minutes)
+Two sessions 15 minutes apart? One command puts everything back to the clean brownfield baseline:
 ```bash
-./rollback.sh                                                      # Cloud Run back to the 'baseline' revision (seconds)
-git fetch origin && git reset --hard origin/main && git clean -fd  # remove the generated feature files locally
-./configure.sh                                                     # refill your values (no questions asked)
+./reset-demo.sh
 ```
-Then move the Jira ticket back to **To Do**.
+It does, in order: Cloud Run `partner-forum-2026` → `baseline` revision (`/campaign` disappears) · `git reset --hard origin/main && git clean -fd` (removes `campaign_router.py`, `templates/campaign.html`, `stitch_design_proposal.md`) · `./configure.sh` refill · Live Role Poll votes → 0 · verification (`/campaign` 404, `/poll` 200, 0 votes).
 
-**Reset the live boards (presenter only).** The attendee-facing pages have no reset buttons on purpose (anyone with the URL could wipe the session). Reset from your terminal:
+Then two manual steps (~20 s):
+1. **Jira**: move the *Google Fitbit Air Challenge* ticket back to **To Do** and delete the live-URL comment Antigravity left in Phase 3.
+2. **Antigravity**: start a **new chat** (same workspace). Stage screen tab: `<SERVICE_URL>/poll`.
+
+Optional: the Stitch screen generated in the previous session stays in the shared project; it does no harm (Antigravity generates a fresh one each run), delete it from the Stitch UI only if you want a tidy project.
+
+**Resetting the live boards only (presenter, no buttons in the UI on purpose):**
 ```bash
 SERVICE_URL=$(gcloud run services describe partner-forum-2026 --region europe-west1 --format='value(status.url)')
 curl -s -X POST "$SERVICE_URL/api/admin/reset-votes"    # Live Role Poll back to 0 votes
@@ -168,7 +173,7 @@ curl -s -X POST "$SERVICE_URL/api/campaign/reset"       # Fitbit Air Challenge b
 | `DESIGN.md` | AuraTech design system (reference copy of the one in the shared Stitch project) |
 | `docs/JIRA_TICKET.md` | The ticket Antigravity implements |
 | `setup.sh`, `Dockerfile.base`, `cloudbuild.base.yaml` | One-time GCP project setup + pre-cached base image (deploys in ~15–20 s) |
-| `deploy.sh`, `mark-baseline.sh`, `rollback.sh` | Deploy, tag the clean baseline, restore it |
+| `deploy.sh`, `mark-baseline.sh`, `rollback.sh`, `reset-demo.sh` | Deploy, tag the clean baseline, restore it, full between-sessions reset |
 | `scripts/check-cloud.sh` | Step 4 connectivity checks |
 | `.agent/` | Antigravity rules and skills |
 
