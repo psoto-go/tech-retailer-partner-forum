@@ -1,13 +1,16 @@
 #!/usr/bin/env bash
 # AuraTech Partner Kit — set YOUR values for the <YOUR_...> placeholders.
 #
-#   ./configure.sh                            # interactive: asks for your GCP project ID (Enter keeps the current one)
-#   ./configure.sh --set GCP_PROJECT_ID=<id>  # non-interactive (used by Antigravity)
-#   ./configure.sh --show                     # print the stored value
+#   ./configure.sh                                        # interactive: asks for your values (Enter keeps the current one)
+#   ./configure.sh --set GCP_PROJECT_ID=<id>              # non-interactive (used by Antigravity)
+#   ./configure.sh --set STITCH_DESIGN_SYSTEM_ID=assets/… # Antigravity saves the design system it bootstraps
+#   ./configure.sh --show                                 # print the stored values
 #
-# Only GCP_PROJECT_ID is user-specific. Jira (your MCP) and Stitch (shared project baked into the repo) need no config.
+# Keys: GCP_PROJECT_ID (required), STITCH_PROJECT_ID (required, your own Stitch project),
+#       STITCH_DESIGN_SYSTEM_ID (optional: leave empty and Antigravity creates it from DESIGN.md on first run).
+# Jira needs no config (your Jira MCP).
 #
-# The value is stored OUTSIDE the repo in ~/.auratech/<repo>.env (never committed) and written into
+# The values are stored OUTSIDE the repo in ~/.auratech/<repo>.env (never committed) and written into
 # .agent/rules, .agent/skills, Dockerfile and the scripts.
 # After every reset (git reset --hard / git clean), just run ./configure.sh again: no questions asked.
 # Compatible with macOS default bash 3.2 (no associative arrays).
@@ -19,13 +22,15 @@ REMOTE="$(git remote get-url origin 2>/dev/null || true)"
 NAME="$(basename "${REMOTE:-${ROOT}}" .git)"
 CFG_DIR="${HOME}/.auratech"
 CFG="${CFG_DIR}/${NAME}.env"
-KEYS="GCP_PROJECT_ID"
+KEYS="GCP_PROJECT_ID STITCH_PROJECT_ID STITCH_DESIGN_SYSTEM_ID"
 
 command -v python3 >/dev/null 2>&1 || { echo "❌ python3 is required (macOS: xcode-select --install)"; exit 1; }
 
 help_for() {
   case "$1" in
     GCP_PROJECT_ID)          echo "Google Cloud project ID (e.g. my-project-123)  [README Step 4]" ;;
+    STITCH_PROJECT_ID)       echo "Your Stitch project ID: digits from the URL stitch.withgoogle.com/projects/<ID>  [README Step 2]" ;;
+    STITCH_DESIGN_SYSTEM_ID) echo "Stitch design system (assets/…) — leave EMPTY: Antigravity creates it from DESIGN.md on first run  [README Step 2]" ;;
   esac
 }
 valid_key() { case " ${KEYS} " in *" $1 "*) return 0 ;; *) return 1 ;; esac; }
@@ -50,8 +55,9 @@ if [[ "${1:-}" == "--show" ]]; then
   exit 0
 elif [[ "${1:-}" == "--set" ]]; then
   MODE="set"; shift
-  [[ $# -gt 0 ]] || { echo "Usage: ./configure.sh --set GCP_PROJECT_ID=<id>"; exit 1; }
+  [[ $# -gt 0 ]] || { echo "Usage: ./configure.sh --set KEY=VALUE   (keys: ${KEYS})"; exit 1; }
   for kv in "$@"; do
+    [[ "${kv}" == "--set" ]] && continue   # tolerate: --set A=1 --set B=2
     k="${kv%%=*}"; v="${kv#*=}"
     valid_key "${k}" || { echo "❌ Unknown key '${k}'. Valid: ${KEYS}"; exit 1; }
     setv "NEW_${k}" "${v}"
@@ -77,6 +83,10 @@ fi
 
 GP0="$(get NEW_GCP_PROJECT_ID)"
 [[ -z "${GP0}" || "${GP0}" =~ ^[a-z][a-z0-9-]{4,28}[a-z0-9]$ ]] || echo "⚠️  '${GP0}' doesn't look like a GCP project ID (lowercase letters, digits, hyphens)."
+SP0="$(get NEW_STITCH_PROJECT_ID)"; SP0="${SP0##*/projects/}"; SP0="${SP0%%[/?]*}"; setv NEW_STITCH_PROJECT_ID "${SP0}"   # accept a pasted URL
+[[ -z "${SP0}" || "${SP0}" =~ ^[0-9]{10,25}$ ]] || echo "⚠️  '${SP0}' doesn't look like a Stitch project ID (digits only, from the project URL)."
+DS0="$(get NEW_STITCH_DESIGN_SYSTEM_ID)"
+[[ -z "${DS0}" || "${DS0}" =~ ^assets/[0-9a-f]+$ ]] || echo "⚠️  '${DS0}' doesn't look like a Stitch design system ID (assets/<hex>)."
 
 mkdir -p "${CFG_DIR}" && chmod 700 "${CFG_DIR}"
 : > "${CFG}"
@@ -86,7 +96,7 @@ chmod 600 "${CFG}"
 for k in ${KEYS}; do export "OLD_${k}" "NEW_${k}"; done
 python3 - <<'PY'
 import os, re
-keys = ["GCP_PROJECT_ID"]
+keys = ["GCP_PROJECT_ID", "STITCH_PROJECT_ID", "STITCH_DESIGN_SYSTEM_ID"]
 old = {k: os.environ.get("OLD_" + k, "") for k in keys}
 new = {k: os.environ.get("NEW_" + k, "") for k in keys}
 

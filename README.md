@@ -8,9 +8,9 @@ Brownfield demo for **Google Antigravity**. You start from an existing web app: 
 
 1. **Developer → Antigravity**: the 4 demo prompts drive the whole session.
 2. **Antigravity → Jira Cloud** (Atlassian Rovo MCP): finds your *Google Fitbit Air Challenge* ticket and moves it **To Do → In Progress → Done**.
-3. **Antigravity → Google Stitch** (Stitch MCP): generates the campaign screen from the shared AuraTech design system and waits for your approval.
+3. **Antigravity → Google Stitch** (Stitch MCP): generates the campaign screen from the AuraTech design system in **your** Stitch project and waits for your approval.
 4. **`./deploy.sh` → Cloud Build → Cloud Run**: `gcloud run deploy --source` on the pre-cached base image from Artifact Registry; a new revision serves the Storefront `/`, the Live Role Poll `/poll` and the new `/campaign` (baseline tag + `./rollback.sh`).
-5. **Fitbit Air Challenge → Vertex AI Nano Banana** (`gemini-3.1-flash-image`): generates each attendee's campaign image from the official Fitbit Air reference photo, authenticated with the Cloud Run service identity.
+5. **Fitbit Air Challenge → Vertex AI Nano Banana** (`gemini-3.1-flash-image`): generates each attendee's campaign image from the Fitbit Air reference render, authenticated with the Cloud Run service identity.
 6. **Audience phones → Cloud Run** over HTTPS after scanning the QR on the stage screen: generate, vote, live leaderboard.
 
 📎 Session takeaways: [Partner Forum Platform Takeaways](https://docs.google.com/presentation/d/1N0hGiLZYCsasegMNkfARWSR2T4soOZ_k/edit)
@@ -21,12 +21,16 @@ Brownfield demo for **Google Antigravity**. You start from an existing web app: 
 > | Placeholder | What it is | Where you get it |
 > |---|---|---|
 > | `<YOUR_GCP_PROJECT_ID>` | Your Google Cloud project ID | [Cloud console](https://console.cloud.google.com/) → project picker |
+> | `<YOUR_STITCH_PROJECT_ID>` | Your own Stitch project | [stitch.withgoogle.com](https://stitch.withgoogle.com/) → **New project** → the digits in the URL `…/projects/<ID>` (Step 2) |
+> | `<YOUR_STITCH_DESIGN_SYSTEM_ID>` | The AuraTech design system inside that project | **Leave empty**: Antigravity creates it from `DESIGN.md` on the first run and saves it (`assets/…`) |
 >
-> **One command:** `./configure.sh` asks for your GCP project ID, stores it **outside the repo** in `~/.auratech/<repo>.env` and fills the placeholder. Re-run it any time; after a `git reset` it refills without questions.
+> **One command:** `./configure.sh` asks for your GCP project ID and Stitch project ID, stores them **outside the repo** in `~/.auratech/<repo>.env` and fills the placeholders. Re-run it any time; after a `git reset` it refills without questions.
 >
-> **Jira and Stitch need no configuration**: Antigravity finds your ticket through your Jira MCP, and the repo already points to the shared Stitch project [`11024850840388252926`](https://stitch.withgoogle.com/projects/11024850840388252926) with its design system `assets/e0fecde15a2549a9b793168efec1fa4f` (AuraTech Minimal Hardware). Ask the owner to share that Stitch project with your Google account.
+> **Jira needs no configuration**: Antigravity finds your ticket through your Jira MCP. **Stitch** is your own project (Step 2); nobody shares anything with you.
 >
 > Antigravity is instructed to **ask you** for any placeholder that is still empty. It never stores tokens or API keys in the repo.
+
+> **Demo code, not a product.** AuraTech is a fictional retailer. This is example code for a live demo: in-memory state, a public Cloud Run service, and **unauthenticated reset endpoints** (`POST /api/campaign/reset`, `POST /api/admin/reset-votes`) — anyone with the URL can wipe the boards. Do not use it in production.
 
 ## Prerequisites
 - [Google Antigravity](https://antigravity.google/) installed.
@@ -73,7 +77,8 @@ Official guide: [Get started with the Atlassian Rovo MCP server](https://support
    }
    ```
    Replace `<YOUR_STITCH_API_KEY>` **only in your local `mcp_config.json`**. Never put it in this repo.
-3. Refresh the MCP servers and test: *"List my Stitch projects."* You should see the shared project `11024850840388252926` (ask the owner to share it with you if not).
+3. Still in Stitch, create a project for this demo (**New project**, any name, e.g. *AuraTech*) and copy the digits from its URL `https://stitch.withgoogle.com/projects/<ID>` → `./configure.sh` (or `./configure.sh --set STITCH_PROJECT_ID=<ID>`). Leave the design system empty: Antigravity creates it from `DESIGN.md` on the first run.
+4. Refresh the MCP servers and test: *"List my Stitch projects."* Your new project must be in the list (the API key and the project must belong to the same Google account).
 
 Official guide: [Stitch MCP setup](https://stitch.withgoogle.com/docs/mcp/setup).
 
@@ -108,7 +113,7 @@ Do not continue until `check-cloud.sh` prints **🎉 All checks passed**.
 Useful docs: [Cloud Run deploy from source](https://cloud.google.com/run/docs/deploying-source-code) · [Public access / invoker IAM check](https://cloud.google.com/run/docs/securing/managing-access#invoker_check) · [Vertex AI image generation](https://cloud.google.com/vertex-ai/generative-ai/docs/image/overview).
 
 ## Step 5: Deploy the existing webpage to Cloud Run (baseline)
-The existing storefront and Live Role Poll already live as screens in the shared Stitch project `11024850840388252926`, with the AuraTech design system Antigravity will reuse for the new feature. Nothing to create in Stitch. Ask Antigravity:
+Optional but recommended once: *"Bootstrap my Stitch project"* — Antigravity uploads `DESIGN.md`, creates the AuraTech design system in your Stitch project, saves its id with `./configure.sh --set STITCH_DESIGN_SYSTEM_ID=…`, and generates the two baseline context screens (storefront, Live Role Poll). If you skip it, it happens automatically at the start of the ticket run. Then ask Antigravity:
 > *"Deploy the existing web with `./deploy.sh` and mark it as the baseline with `./mark-baseline.sh`."*
 
 Check the live URL printed by `deploy.sh`:
@@ -124,7 +129,7 @@ In Antigravity:
 
 Antigravity finds your "Google Fitbit Air Challenge" ticket, summarises it and asks whether to start. Say yes. It follows the 3-phase lifecycle in `.agent/rules/`:
 1. Moves the ticket to **In Progress**, generates the *Google Fitbit Air Challenge* screen in Stitch and **stops for your approval** (Step 7).
-2. After approval: builds `campaign_router.py` (Nano Banana with the official Fitbit Air reference image) and `templates/campaign.html`, deploys with `./deploy.sh`, and asks whether you're happy and want to close the ticket.
+2. After approval: builds `campaign_router.py` (Nano Banana with the Fitbit Air reference render) and `templates/campaign.html`, deploys with `./deploy.sh`, and asks whether you're happy and want to close the ticket.
 3. On your confirmation: comments the live URL on the ticket and moves it to **Done**.
 
 ## Step 7: Approve the Stitch UI
@@ -156,7 +161,7 @@ Then two manual steps (~20 s):
 1. **Jira**: move the *Google Fitbit Air Challenge* ticket back to **To Do** and delete the live-URL comment Antigravity left in Phase 3.
 2. **Antigravity**: start a **new chat** (same workspace). Stage screen tab: `<SERVICE_URL>/poll`.
 
-Optional: the Stitch screen generated in the previous session stays in the shared project; it does no harm (Antigravity generates a fresh one each run), delete it from the Stitch UI only if you want a tidy project.
+Optional: the Stitch screen generated in the previous session stays in your project; it does no harm (Antigravity generates a fresh one each run), delete it from the Stitch UI only if you want a tidy project.
 
 **Resetting the live boards only (presenter, no buttons in the UI on purpose):**
 ```bash
@@ -165,20 +170,20 @@ curl -s -X POST "$SERVICE_URL/api/admin/reset-votes"    # Live Role Poll back to
 curl -s -X POST "$SERVICE_URL/api/campaign/reset"       # Fitbit Air Challenge back to 0 images / 0 votes
 ```
 
-## Troubleshooting: Antigravity generated the screen in another Stitch project
-Symptom: the Stitch proposal shows `projects/<something else>/screens/...` instead of `projects/11024850840388252926/...`, or you cannot find the screen in the Stitch UI.
-Cause: the Stitch API key in `mcp_config.json` could not open `11024850840388252926` (stale checkout with an old project ID, or the key was generated under a Google account the project is not shared with), and Antigravity fell back to a new project.
-Fix (2 minutes), then start a **new chat**:
-1. `git pull` (or `./reset-demo.sh`) so `.agent/` carries the current project ID `11024850840388252926`.
-2. In Antigravity ask: *"List my Stitch projects."* → `11024850840388252926` must be in the list. If not: open [stitch.withgoogle.com](https://stitch.withgoogle.com) with the account the project is shared with, regenerate the API key there, paste it into `mcp_config.json`, refresh MCP servers, repeat.
-3. The repo rules now hard-stop instead of falling back: Antigravity will refuse to `create_project` or use another `projectId`.
+## Troubleshooting: Stitch pre-flight fails / screen generated in another project
+Symptom: Antigravity stops with *permission denied / not found* on `get_project`, or the proposal shows `projects/<something else>/screens/...`.
+Cause: `STITCH_PROJECT_ID` is empty, wrong, or belongs to a different Google account than the Stitch API key in `mcp_config.json`.
+Fix, then start a **new chat**:
+1. `./configure.sh --show` → `STITCH_PROJECT_ID` must be the digits of your project URL; fix with `./configure.sh --set STITCH_PROJECT_ID=<ID>`.
+2. In Antigravity ask: *"List my Stitch projects."* → your project must be in the list. If not, regenerate the API key in the Stitch UI **with the account that owns the project** and paste it into `mcp_config.json`.
+3. The repo rules hard-stop instead of falling back: Antigravity will refuse to `create_project` or use another `projectId`.
 
 ## Repository map
 | File | Purpose |
 |---|---|
 | `main.py` | FastAPI: storefront `/`, Live Role Poll `/poll` `/vote` `/admin`, QR `/api/qr`; auto-mounts `campaign_router.py` if present |
-| `templates/`, `static/` | Existing UI (`static/images/fitbit-air.png` = official Google Store photo, also the Nano Banana reference) |
-| `DESIGN.md` | AuraTech design system (reference copy of the one in the shared Stitch project) |
+| `templates/`, `static/` | Existing UI (`static/images/fitbit-air.png` = generated product render, also the Nano Banana reference) |
+| `DESIGN.md` | AuraTech design system — the source Antigravity uploads to **your** Stitch project to create the design system |
 | `docs/JIRA_TICKET.md` | The ticket Antigravity implements |
 | `setup.sh`, `Dockerfile.base`, `cloudbuild.base.yaml` | One-time GCP project setup + pre-cached base image (deploys in ~15–20 s) |
 | `deploy.sh`, `mark-baseline.sh`, `rollback.sh`, `reset-demo.sh` | Deploy, tag the clean baseline, restore it, full between-sessions reset |

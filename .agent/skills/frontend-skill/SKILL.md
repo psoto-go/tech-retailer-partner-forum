@@ -19,15 +19,16 @@ Use this skill whenever designing and building the frontend for the **Fitbit Emp
 ### Step 1.1: Inspect `templates/poll.html` and `templates/index.html`
 Read `templates/poll.html` (lines 1–165 and 275–295) and `templates/index.html` (lines 115–150) so you have the exact AuraTech `<head>` Tailwind configuration, `<header>` TopNavBar structure, and `<footer>`.
 
-### Step 1.2: Pre-flight — verify access to the shared Stitch project
-Call `get_project` with `name: "projects/11024850840388252926"`. The response must succeed and list the design system `assets/e0fecde15a2549a9b793168efec1fa4f`.
-If it fails (*permission denied*, *not found*): **STOP**. Tell the user to `git pull` (stale project ID) and to verify that the Google account that generated the Stitch API key in `mcp_config.json` can open the shared project (README → Troubleshooting). Do NOT call `create_project`, do NOT pick another project via `list_projects`, do NOT generate anywhere other than `11024850840388252926`.
+### Step 1.2: Pre-flight — verify the user's Stitch project and design system
+If `STITCH_DESIGN_SYSTEM_ID` is not set yet (the design system value below still reads as an unfilled `<YOUR_...>` placeholder), run the design-system bootstrap from `.agent/rules/auratech-architecture.md` Section 0 first (upload `DESIGN.md`, create the design system, save it with `./configure.sh --set STITCH_DESIGN_SYSTEM_ID=...`).
+Call `get_project` with `name: "projects/<YOUR_STITCH_PROJECT_ID>"`. The response must succeed and list the design system `<YOUR_STITCH_DESIGN_SYSTEM_ID>`.
+If it fails (*permission denied*, *not found*): **STOP**. Tell the user to check `./configure.sh --show` (`STITCH_PROJECT_ID` must be a project of the same Google account that generated the Stitch API key in `mcp_config.json`, README → Troubleshooting). Do NOT call `create_project`, do NOT pick another project via `list_projects`, do NOT generate anywhere other than `<YOUR_STITCH_PROJECT_ID>`.
 
 ### Step 1.3: Call Google Stitch MCP (`generate_screen_from_text`)
 Call `generate_screen_from_text` using the Stitch project for this repository:
 
-- **`projectId`**: `"11024850840388252926"`
-- **`designSystem`**: `"assets/e0fecde15a2549a9b793168efec1fa4f"` (AuraTech Minimal Hardware)
+- **`projectId`**: `"<YOUR_STITCH_PROJECT_ID>"`
+- **`designSystem`**: `"<YOUR_STITCH_DESIGN_SYSTEM_ID>"`
 - **`deviceType`**: `"DESKTOP"`
 - **`modelId`**: `"GEMINI_3_8_FLASH"`
 - **`prompt`**:
@@ -110,5 +111,5 @@ Use `replace_file_content` to insert ONLY the single `"Fitbit Campaign"` link ri
   ```html
   <a class="border border-primary text-primary hover:bg-primary hover:text-on-primary font-label-lg px-8 py-3 rounded-full transition-all duration-200" href="/campaign">Join the Fitbit Air Challenge</a>
   ```
-- **Product fidelity**: The official product image is `static/images/fitbit-air.png` (real Google Store photo). Use it for the "Official product reference" thumbnail in `campaign.html`. Never replace it with a generated image and never invent Fitbit Air specs, colours or prices (only: "Lighter gets mightier", 24/7 tracking, up to a week of battery, Google Health Coach built with Gemini, "From $99.99").
+- **Product fidelity**: the product reference image is `static/images/fitbit-air.png` (a generated render shipped in the repo). Use it for the "Official product reference" thumbnail in `campaign.html`. Never swap it for another image and never invent Fitbit Air specs, colours or prices — keep copy generic.
 - **STRICT BAN**: Do NOT change any other lines in `templates/index.html` or `templates/poll.html`!

@@ -1,9 +1,9 @@
 # AuraTech Design System (DESIGN.md)
 
-Design system of the **AuraTech — Official Google Hardware Partner** storefront. Reference copy of the design system `assets/e0fecde15a2549a9b793168efec1fa4f` (AuraTech Minimal Hardware) already created in the shared Stitch project `11024850840388252926`, which Antigravity reuses so every new screen matches the existing web in `templates/`. You don't need to upload it.
+Design system of the **AuraTech — Official Google Hardware Partner** storefront. Source file for the Stitch design system: Antigravity uploads it to **your** Stitch project (`upload_design_md` → `create_design_system_from_design_md`) and saves the resulting id as `STITCH_DESIGN_SYSTEM_ID`.
 
 ## Brand & Tone
-- Minimalist, premium consumer-hardware retail (Google Store–like). Bright, airy, generous whitespace, soft 1px borders, no heavy shadows, no gradients.
+- Minimalist, premium consumer-hardware retail. Bright, airy, generous whitespace, soft 1px borders, no heavy shadows, no gradients.
 - Text wordmark "AuraTech" (primary blue, bold) on the left of the header. No icon badge, no top announcement bar.
 - Top navigation (exact order): Store · Fitbit · Wearables · Accessories · Live Role Poll · Support.
 
@@ -47,4 +47,4 @@ Design system of the **AuraTech — Official Google Hardware Partner** storefron
 - **Footer:** minimal, light, small links.
 
 ## Imagery
-- Real product photography only for real products (e.g. `static/images/fitbit-air.png` is the official Google Store photo of Google Fitbit Air). Never invent product details.
+- Product imagery: `static/images/fitbit-air.png` is a generated product render (not a Google asset); keep product visuals clean and neutral. Never invent product details.

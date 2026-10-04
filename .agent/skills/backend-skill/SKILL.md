@@ -77,7 +77,7 @@ def _generate_fallback_png(prompt: str, author: str) -> bytes:
     return buf.getvalue()
 
 
-# Official Google Store photo of Google Fitbit Air, sent as reference image on EVERY generation
+# Product reference render of Google Fitbit Air (shipped in the repo), sent as reference image on EVERY generation
 REFERENCE_IMAGE_PATH = os.path.join("static", "images", "fitbit-air.png")
 try:
     with open(REFERENCE_IMAGE_PATH, "rb") as _f:
@@ -86,7 +86,7 @@ except OSError:
     REFERENCE_IMAGE_BYTES = b""
 
 FIDELITY_INSTRUCTION = (
-    "The attached image is the OFFICIAL Google Store product photo of Google Fitbit Air. "
+    "The attached image is the product reference for Google Fitbit Air. "
     "Whenever Google Fitbit Air appears in the generated image it MUST look exactly like the product in the "
     "reference image: a screenless woven fabric band with the same shape, texture, clasp and buckle. "
     "NEVER add a screen, display, watch face, digits or buttons to it and never invent a different Fitbit device. "
@@ -97,7 +97,7 @@ FIDELITY_INSTRUCTION = (
 async def _generate_fitbit_image_bytes(prompt: str, author: str) -> bytes:
     enhanced_prompt = (
         "Commercial marketing photography for the AuraTech Google Fitbit Air Challenge "
-        "(AuraTech is an official Google hardware partner). "
+        "(AuraTech is a fictional hardware retailer). "
         f"Campaign scene: {prompt}. Photorealistic, clean editorial lighting, 4:3 composition. "
         + FIDELITY_INSTRUCTION
     )
@@ -220,7 +220,7 @@ async def api_campaign_generate(request: Request):
         "name": name,
         "company": company,
         "author": author,
-        "creatorId": voter_id,  # internal only: enforces the no-self-vote rule
+        "creatorId": voter_id,  # server-side only (never returned by the API): enforces the no-self-vote rule
         "model": "gemini-3.1-flash-image",
         "imageUrl": f"/api/campaign/images/{sub_id}.png",
         "createdAt": int(time.time() * 1000),

@@ -11,13 +11,13 @@ Launch the Google Fitbit Air Challenge — Campaign Studio & Real-Time Voting Le
 
 ## Description
 ### Context & Business Goal
-AuraTech (Official Google Hardware Partner) is launching the **Google Fitbit Air Challenge** for a live event with up to 300 concurrent attendees. Attendees scan a live QR code on the main stage screen, generate a campaign visual for Google Fitbit Air using Vertex AI Nano Banana (`gemini-3.1-flash-image`), and vote in real time. **The most-voted image wins a Google Fitbit Air.**
+AuraTech (a fictional Google hardware retailer) is launching the **Google Fitbit Air Challenge** for a live event with up to 300 concurrent attendees. Attendees scan a live QR code on the main stage screen, generate a campaign visual for Google Fitbit Air using Vertex AI Nano Banana (`gemini-3.1-flash-image`), and vote in real time. **The most-voted image wins a Google Fitbit Air.**
 
 ### Product Fidelity (Google Fitbit Air)
 - Page title "Google Fitbit Air Challenge"; subtitle "Create the next campaign visual for Google Fitbit Air. The most-voted image wins a Google Fitbit Air."
 - **No example prompts, suggestion chips, sample scenes or placeholder text anywhere**: attendees must come up with their own idea. No device selector either (the product is always Google Fitbit Air).
-- Every Nano Banana generation MUST receive the official Google Store photo `static/images/fitbit-air.png` as input reference image: if Fitbit Air appears it must be exactly that product (screenless woven fabric band, same shape and buckle; never a screen or watch face). Do not block user prompts.
-- Only official Google Store facts: "Lighter gets mightier", 24/7 tracking, up to a week of battery, Google Health Coach built with Gemini, "From $99.99".
+- Every Nano Banana generation MUST receive the product reference render `static/images/fitbit-air.png` as input reference image: if Fitbit Air appears it must be exactly that product (screenless woven fabric band, same shape and buckle; never a screen or watch face). Do not block user prompts.
+- Product copy stays neutral and generic: never invent specs, colours or prices and never quote marketing claims.
 
 ### Mandatory 3-Phase Execution Workflow (.agent/skills/)
 Follow `.agent/rules/auratech-architecture.md` and `.agent/skills/` in strict order:
