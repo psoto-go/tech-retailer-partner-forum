@@ -12,6 +12,15 @@ if [[ -z "${PROJECT_ID}" ]]; then
   echo "❌ Set GOOGLE_CLOUD_PROJECT=<your-project-id> (or run: gcloud config set project <id>)"; exit 1
 fi
 
+BASE_IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/auratech-base:latest"
+if ! gcloud artifacts docker images describe "${BASE_IMAGE}" --project "${PROJECT_ID}" >/dev/null 2>&1; then
+  echo "❌ Base image not found in project ${PROJECT_ID}: ${BASE_IMAGE}"
+  echo "   This is a new project. Run the one-time setup first (APIs, Artifact Registry, IAM, base image, ~3 min):"
+  echo "     ./setup.sh && ./scripts/check-cloud.sh"
+  echo "   then: ./deploy.sh && ./mark-baseline.sh"
+  exit 1
+fi
+
 echo "🚀 Fast-Deploying AuraTech Storefront to Cloud Run (${SERVICE_NAME} in ${PROJECT_ID} / ${REGION})..."
 gcloud run deploy "${SERVICE_NAME}" \
   --source . \

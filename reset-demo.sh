@@ -20,6 +20,14 @@ main() {
   SERVICE_NAME="${SERVICE_NAME:-partner-forum-2026}"
   [[ -n "${PROJECT_ID}" ]] || { echo "❌ No GCP project. Run ./configure.sh first."; exit 1; }
 
+  if ! gcloud run services describe "${SERVICE_NAME}" --project "${PROJECT_ID}" --region "${REGION}" >/dev/null 2>&1; then
+    echo "❌ Cloud Run service ${SERVICE_NAME} does not exist yet in ${PROJECT_ID}."
+    echo "   First-time setup for a new project:  ./setup.sh && ./scripts/check-cloud.sh   (once per project)"
+    echo "   then:                                ./deploy.sh && ./mark-baseline.sh        (creates the baseline)"
+    echo "   and only after that:                 ./reset-demo.sh"
+    exit 1
+  fi
+
   echo "1/5 ⏪ Cloud Run ${SERVICE_NAME} → baseline revision"
   ./rollback.sh | tail -1
 
