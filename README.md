@@ -195,3 +195,8 @@ Fix, then start a **new chat**:
 pip install -r requirements.txt
 uvicorn main:app --reload --port 8080
 ```
+
+## License and disclaimer
+Licensed under the [Apache License 2.0](LICENSE). Contributions: see [CONTRIBUTING.md](CONTRIBUTING.md).
+
+This is not an officially supported Google product. AuraTech is a fictional retailer created for a demo; product names are trademarks of their respective owners.
