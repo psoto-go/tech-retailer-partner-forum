@@ -130,7 +130,7 @@ Antigravity finds your "Google Fitbit Air Challenge" ticket, summarises it and a
 ## Step 7: Approve the Stitch UI
 In Phase 1, Antigravity shows the Stitch render (`stitch_design_proposal.md`) and **waits**. Check:
 - The header and nav are identical to the existing web, plus `Fitbit Campaign`.
-- The form has blank **Name** and **Company** inputs and a blank **Your campaign scene** textarea (no placeholder text, **no suggestion chips or example prompts** — attendees bring their own idea), a QR code card and the live leaderboard.
+- The form has blank **Name** and **Company** inputs and a blank **Your campaign scene** textarea (no placeholder text, **no suggestion chips or example prompts** — attendees bring their own idea), a QR code card and the live leaderboard. Voting: one active vote per browser and **no self-voting** (own cards show a *Your campaign* badge with the button disabled; the backend rejects it anyway).
 
 Reply *"approved"*, or ask for changes and it will iterate in Stitch before writing any code.
 

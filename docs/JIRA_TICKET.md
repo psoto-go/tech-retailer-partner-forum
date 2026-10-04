@@ -27,7 +27,7 @@ Follow `.agent/rules/auratech-architecture.md` and `.agent/skills/` in strict or
    - Generate the **AuraTech - Google Fitbit Air Challenge** screen in Google Stitch with the repository's design system; the form has two separate blank inputs **Name** and **Company** plus a blank "Your campaign scene" textarea (no placeholder text, no suggestion chips, no example prompts).
    - Present the Stitch render and **pause for user approval** before writing code.
 2. **Phase 2 — Backend, Stitch HTML integration, Cloud Run deploy & sign-off (after approval)**
-   - `backend-skill`: `campaign_router.py` with `gemini-3.1-flash-image` (async `client.aio`, `Semaphore(15)`, failover `gemini-2.5-flash-image`, Pillow fallback), reference image on every generation, in-memory state starting at 0, binary PNG endpoint, 1 vote per attendee.
+   - `backend-skill`: `campaign_router.py` with `gemini-3.1-flash-image` (async `client.aio`, `Semaphore(15)`, failover `gemini-2.5-flash-image`, Pillow fallback), reference image on every generation, in-memory state starting at 0, binary PNG endpoint, one active vote per attendee, **and no self-voting (an attendee cannot vote for their own image; own cards show a 'Your campaign' badge with the vote button disabled)**.
    - `frontend-skill`: `templates/campaign.html` = Stitch `<main>` + exact `<head>/<header>/<footer>` of `templates/poll.html`; add the `Fitbit Campaign` nav link and the hero CTA "Join the Fitbit Air Challenge" (→ `/campaign`).
    - `deploy-skill`: `python3 -m py_compile main.py campaign_router.py` then `./deploy.sh`.
    - Keep this ticket **In Progress** and ask: *"Are you happy with the live implementation, and would you like me to close this Jira ticket?"*

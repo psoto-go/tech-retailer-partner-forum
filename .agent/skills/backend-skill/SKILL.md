@@ -19,7 +19,11 @@ Use this skill whenever implementing the backend for the **Fitbit Employee Marke
 4. **Binary Image Endpoint (`GET /api/campaign/images/{image_id}.png`)**:
    - NEVER embed `base64` image strings inside `GET /api/campaign/state`. Serve PNG bytes from `IMAGE_BLOBS[image_id]` with `Cache-Control: public, max-age=86400` so `/api/campaign/state` stays under 2 KB even with 300 attendees polling.
 5. **Strict 1-Vote-Per-Employee Enforcement**:
-   - Track each voter by `pf_voter_id` cookie or `voterId`. A voter can NEVER vote multiple times on the same image (`if CAMPAIGN_VOTES.get(voter_id) == sub_id: return 400`).
+   - Track each voter by `voterId` (sent by the browser from `localStorage`) or the `pf_voter_id` cookie. One ACTIVE vote per voter: voting another card moves the vote; re-voting the same card returns 400.
+6. **No Self-Voting (creator cannot vote for their own image)**:
+   - `POST /api/campaign/generate` MUST read `voterId` from the JSON body (fallback cookie) and store it on the submission as `creatorId`.
+   - `POST /api/campaign/vote` MUST return `400 {"error": "You can't vote for your own campaign image — ask your colleagues to vote for it!", "ownSubmission": true}` when `submission["creatorId"] == voter_id`.
+   - `GET /api/campaign/state` exposes a boolean `isMine` per submission (computed server-side) and NEVER exposes `creatorId` (strip it from the public payload).
 
 ## Exact Implementation (`campaign_router.py`)
 Write the following complete file to `campaign_router.py` in a single `write_to_file` call:
@@ -44,7 +48,7 @@ PROJECT_ID = os.environ.get("GOOGLE_CLOUD_PROJECT", "")
 
 # In-memory RAM store for 300 concurrent attendees (--max-instances=1 --concurrency=1000)
 CAMPAIGN_SUBMISSIONS: List[Dict[str, Any]] = []
-CAMPAIGN_VOTES: Dict[str, str] = {}  # voter_id -> submission_id
+CAMPAIGN_VOTES: Dict[str, str] = {}  # voter_id -> submission_id (one active vote per voter)
 IMAGE_BLOBS: Dict[str, bytes] = {}   # submission_id -> PNG bytes
 
 # Concurrency guard so image generation bursts never starve real-time voting
@@ -140,12 +144,14 @@ def _build_campaign_state(voter_id: str) -> Dict[str, Any]:
     for item in CAMPAIGN_SUBMISSIONS:
         v = counts.get(item["id"], 0)
         pct = round((v / total_votes) * 100, 1) if total_votes > 0 else 0.0
+        public_item = {k: val for k, val in item.items() if k != "creatorId"}  # never leak creator ids
         enriched.append(
             {
-                **item,
+                **public_item,
                 "votes": v,
                 "percentage": pct,
                 "isMyVote": (my_vote == item["id"]),
+                "isMine": (item.get("creatorId") == voter_id),
             }
         )
 
@@ -203,7 +209,7 @@ async def api_campaign_generate(request: Request):
     if not prompt:
         return JSONResponse({"error": "Prompt is required"}, status_code=400)
 
-    voter_id = _get_voter_id(request)
+    voter_id = body.get("voterId") or _get_voter_id(request)  # same browser id used for voting
     sub_id = "fitbit_" + secrets.token_hex(5)
     png_bytes = await _generate_fitbit_image_bytes(prompt, author)
     IMAGE_BLOBS[sub_id] = png_bytes
@@ -214,6 +220,7 @@ async def api_campaign_generate(request: Request):
         "name": name,
         "company": company,
         "author": author,
+        "creatorId": voter_id,  # internal only: enforces the no-self-vote rule
         "model": "gemini-3.1-flash-image",
         "imageUrl": f"/api/campaign/images/{sub_id}.png",
         "createdAt": int(time.time() * 1000),
@@ -233,8 +240,20 @@ async def api_campaign_vote(request: Request):
     sub_id = body.get("submissionId")
     voter_id = body.get("voterId") or _get_voter_id(request)
 
-    if not any(s["id"] == sub_id for s in CAMPAIGN_SUBMISSIONS):
+    submission = next((s for s in CAMPAIGN_SUBMISSIONS if s["id"] == sub_id), None)
+    if submission is None:
         return JSONResponse({"error": "Campaign image not found"}, status_code=404)
+
+    # No self-voting: the creator of an image cannot vote for it
+    if submission.get("creatorId") == voter_id:
+        return JSONResponse(
+            {
+                "error": "You can't vote for your own campaign image — ask your colleagues to vote for it!",
+                "ownSubmission": True,
+                "state": _build_campaign_state(voter_id),
+            },
+            status_code=400,
+        )
 
     # Strict 1-vote-per-user rule: cannot vote multiple times on the same image
     if CAMPAIGN_VOTES.get(voter_id) == sub_id:
