@@ -142,7 +142,7 @@
               Live Role Poll
               <span class="absolute bottom-0 left-0 w-full h-[2px] bg-[#005bbf]"></span>
 </a>
-<a class="text-on-surface-variant hover:text-primary transition-colors text-label-md font-label-md" href="/admin">Support</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors text-label-md font-label-md" href="#">Support</a>
 </nav>
 </div>
 <div class="flex items-center space-x-4">
@@ -301,8 +301,6 @@
 <div class="flex flex-wrap items-center justify-center gap-6 text-body-sm font-body-sm">
 <a class="text-on-surface-variant hover:text-primary transition-colors" href="/">Storefront</a>
 <a class="text-on-surface-variant hover:text-primary transition-colors" href="/vote">Mobile Vote</a>
-<a class="text-on-surface-variant hover:text-primary transition-colors" href="/admin">Admin Panel</a>
-<button class="text-primary hover:underline font-semibold text-body-sm" onclick="simulateVotes(5)">+5 Demo Votes</button>
 </div>
 </div>
 </footer>
@@ -519,22 +517,6 @@
     }
   }
 
-  async function simulateVotes(count = 5) {
-    try {
-      const res = await fetch('/api/admin/simulate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ count })
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.state) renderPollState(data.state);
-        else await refreshState();
-      }
-    } catch (e) {
-      console.error('Simulate error:', e);
-    }
-  }
 
   function connectSSE() {
     const es = new EventSource('/api/stream');

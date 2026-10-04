@@ -10,7 +10,7 @@ Use this skill whenever designing and building the frontend for the **Fitbit Emp
 > **CRITICAL RULE — NO HARDCODED UI, 100% STITCH-GENERATED `<main>` + EXACT `poll.html` SHELL**:
 > 1. You must generate the UI dynamically in **Google Stitch MCP** (`generate_screen_from_text`) following the existing context of `templates/index.html` and `templates/poll.html`.
 > 2. Never invent a different top navigation bar (forbidden: `"Catalog"`, `"Community Poll"`, `"Live Results"`, dark `bg-slate-900` top announcement bars, or blue `"A"` box logos). The navigation menu across the entire site is strictly:
->    `Store` (`/`) | `Fitbit` (`/`) | `Wearables` (`/`) | `Accessories` (`/`) | `Live Role Poll` (`/poll`) | `Fitbit Campaign` (`/campaign`) | `Support` (`/admin`).
+>    `Store` (`/`) | `Fitbit` (`/`) | `Wearables` (`/`) | `Accessories` (`/`) | `Live Role Poll` (`/poll`) | `Fitbit Campaign` (`/campaign`) | `Support` (`#`).
 
 ---
 
@@ -84,7 +84,7 @@ Construct `templates/campaign.html` by combining:
        Fitbit Campaign
        <span class="absolute bottom-0 left-0 w-full h-[2px] bg-[#005bbf]"></span>
      </a>
-     <a class="text-on-surface-variant hover:text-primary transition-colors text-label-md font-label-md" href="/admin">Support</a>
+     <a class="text-on-surface-variant hover:text-primary transition-colors text-label-md font-label-md" href="#">Support</a>
      ```
 2. **Stitch-Generated `<main>` Content from `/tmp/stitch_campaign.html` Wired to Real Backend Endpoints**:
    - Adapt the `<main>` section from `/tmp/stitch_campaign.html` so every interactive element is 100% functional against `campaign_router.py`:
